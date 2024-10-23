@@ -31,7 +31,7 @@ npm install
 - Find "Quickstart" under "Security" portion of the navigation bar.
   - Create a new database username and remember the password.
 
-3. In the backend folder, create a new file, .env
+3. In the backend folder, create a new file: .env
 
 - Copy the following code into your .env:
 
