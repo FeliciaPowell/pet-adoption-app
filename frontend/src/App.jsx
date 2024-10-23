@@ -19,22 +19,31 @@ import ShelterManagement from "./pages/ShelterManagement";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/account" element={<AccountCreation />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/adoption" element={<AdoptionListings />} />
-        <Route path="/adoption_management" element={<AdoptionManagement />} />
-        <Route path="/faqs" element={<FAQs />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/person" element={<PersonProfile />} />
-        <Route path="/pet" element={<PetProfile />} />
-        <Route path="/shelters" element={<ShelterListings />} />
-        <Route path="/shelter_management" element={<ShelterManagement />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/account" element={<AccountCreation />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/adoption" element={<AdoptionListings />} />
+          <Route path="/adoption_management" element={<AdoptionManagement />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/person" element={<PersonProfile />} />
+          <Route path="/pet" element={<PetProfile />} />
+          <Route path="/shelters" element={<ShelterListings />} />
+          <Route path="/shelter_management" element={<ShelterManagement />} />
+        </Routes>
+      </Router>
+
+      <div>
+        {/* <img
+          src="teaser.jpg"
+          style={{ width: "50%", alignContent: "center" }}
+        ></img> */}
+      </div>
+    </>
   );
 }
 
