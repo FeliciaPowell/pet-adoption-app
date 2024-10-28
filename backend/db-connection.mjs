@@ -1,10 +1,6 @@
-require("dotenv").config();
-const express = require("express");
-
-mongoose = require("mongoose");
-const PORT = process.env.PORT;
-const app = express();
-app.use(express.json());
+// Import Dependencies.
+import mongoose from "mongoose";
+import "dotenv/config";
 
 // Connect based on the .env file parameters.
 mongoose.connect(process.env.MONGODB_CONNECT_STRING);
@@ -19,11 +15,4 @@ db.once("open", (err) => {
   }
 });
 
-// Retrieve controllers
-app.get("/", (req, res) => {
-  res.send("Server works");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}...`);
-});
+export default db;
