@@ -4,13 +4,8 @@
 import mongoose from "mongoose";
 import db from "./db-connection.mjs";
 
-// SCHEMA: Define the collection's schema.
+// Schema
 const shelterSchema = new mongoose.Schema({
-  shelterID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    auto: true,
-  },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed password for shelter admin login
@@ -21,7 +16,7 @@ const shelterSchema = new mongoose.Schema({
 // Model
 const shelter = mongoose.model("Shelter", shelterSchema);
 
-// CREATE Model
+// Create a Shelter
 const createShelter = async (req, res) => {
   try {
     const newShelter = new shelter(req.body);
@@ -32,7 +27,7 @@ const createShelter = async (req, res) => {
   }
 };
 
-// Get all shelters
+// Get All Shelters
 const getAllShelters = async (req, res) => {
   try {
     const shelters = await shelter.find();
@@ -42,5 +37,49 @@ const getAllShelters = async (req, res) => {
   }
 };
 
+// Get a Shelter by ID
+const getShelterById = async (req, res) => {
+  try {
+    const shelters = await shelter.findById({ _id: req.params._id });
+    res.status(200).json(shelters);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching shelter" });
+  }
+};
+
+// Edit a Shelter by ID
+const editShelterById = async (req, res) => {
+  try {
+    const updatedShelter = await shelter.findByIdAndUpdate(
+      req.params._id,
+      req.body
+    );
+
+    if (!updatedShelter) {
+      return res.status(404).json({ error: "Shelter not found" });
+    }
+
+    res.status(200).json(updatedShelter);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching shelter" });
+  }
+};
+
+// Delete Shelter by ID
+const deleteShelterById = async (req, res) => {
+  try {
+    const result = await shelter.deleteOne({ _id: req.params._id });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting shelter" });
+  }
+};
+
 // EXPORT variables to use in controller file.
-export { createShelter, getAllShelters };
+export {
+  createShelter,
+  getAllShelters,
+  getShelterById,
+  editShelterById,
+  deleteShelterById,
+};
