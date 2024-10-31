@@ -15,5 +15,8 @@
     "express": "^4.21.1",
     "mongoose": "^8.7.2",
     "nodemon": "^2.0.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3"
   }
 }

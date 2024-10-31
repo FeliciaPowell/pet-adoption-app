@@ -16,33 +16,29 @@ import PersonProfile from "./pages/PersonProfile";
 import PetProfile from "./pages/PetProfile";
 import ShelterListings from "./pages/ShelterListings";
 import ShelterManagement from "./pages/ShelterManagement";
+import Layout from "./components/Layout.jsx";
 
 function App() {
   return (
     <>
       <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/account" element={<AccountCreation />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/adoption" element={<AdoptionListings />} />
-          <Route path="/adoption_management" element={<AdoptionManagement />} />
-          <Route path="/faqs" element={<FAQs />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/person" element={<PersonProfile />} />
-          <Route path="/pet" element={<PetProfile />} />
-          <Route path="/shelters" element={<ShelterListings />} />
-          <Route path="/shelter_management" element={<ShelterManagement />} />
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/account" element={<AccountCreation />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/adoption" element={<AdoptionListings />} />
+            <Route path="/adoption_management" element={<AdoptionManagement />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/person" element={<PersonProfile />} />
+            <Route path="/pet" element={<PetProfile />} />
+            <Route path="/shelters" element={<ShelterListings />} />
+            <Route path="/shelter_management" element={<ShelterManagement />} />
+          </Routes>
+        </Layout>
       </Router>
-
-      <div>
-        {/* <img
-          src="teaser.jpg"
-          style={{ width: "50%", alignContent: "center" }}
-        ></img> */}
-      </div>
     </>
   );
 }
