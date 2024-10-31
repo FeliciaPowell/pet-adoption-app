@@ -22,6 +22,23 @@ app.get("/pets", (req, res) => {
     });
 });
 
+// GET pet by ID
+app.get("/pets/:id", (req, res) => {
+  pets
+    .getPetById(req.params.id)
+    .then((pet) => {
+      if (pet) {
+        res.status(200).json(pet);
+      } else {
+        res.status(404).json({ error: "Pet not found" });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: "Request to retrieve pet by ID failed" });
+    });
+});
+
 app.get("/shelter", shelters.getAllShelters);
 
 // CREATE controllers ************************************
@@ -33,11 +50,22 @@ app.post("/pet", (req, res) => {
       req.body.name,
       req.body.type,
       req.body.breed,
-      req.body.availability,
-      req.body.dateCreated,
+      req.body.age,
+      req.body.gender,
+      req.body.color,
+      req.body.weight,
+      req.body.profileImage,
       req.body.description,
-      req.body.newsItem,
-      req.body.disposition,
+      req.body.medicalHistory,
+      req.body.location,
+      req.body.availability,
+      req.body.vaccination,
+      req.body.spayedNeutered,
+      req.body.kids,
+      req.body.cats,
+      req.body.dogs,
+      req.body.temperament,
+      req.body.dateCreated,
       req.body.shelterID,
       req.body.adopterID
     )
@@ -45,8 +73,8 @@ app.post("/pet", (req, res) => {
       res.status(201).json(pet);
     })
     .catch((error) => {
-      console.log(error);
-      res.status(400).json({ Error: "Invalid request" });
+      console.error(error);
+      res.status(400).json({ error: "Invalid request to create pet" });
     });
 });
 
@@ -58,36 +86,35 @@ app.put("/pets/:_id", (req, res) => {
       req.body.name,
       req.body.type,
       req.body.breed,
-      req.body.availability,
-      req.body.dateCreated,
+      req.body.age,
+      req.body.gender,
+      req.body.color,
+      req.body.weight,
+      req.body.profileImage,
       req.body.description,
-      req.body.newsItem,
-      req.body.disposition,
+      req.body.medicalHistory,
+      req.body.location,
+      req.body.availability,
+      req.body.vaccination,
+      req.body.spayedNeutered,
+      req.body.kids,
+      req.body.cats,
+      req.body.dogs,
+      req.body.temperament,
+      req.body.dateCreated,
       req.body.shelterID,
       req.body.adopterID
     )
     .then((numUpdated) => {
       if (numUpdated === 1) {
-        res.status(200).json({
-          _id: req.params._id,
-          name: req.body.name,
-          type: req.body.type,
-          breed: req.body.breed,
-          availability: req.body.availability,
-          dateCreated: req.body.dateCreated,
-          description: req.body.description,
-          newsItem: req.body.newsItem,
-          disposition: req.body.disposition,
-          shelterID: req.body.shelterID,
-          adopterID: req.body.adopterID,
-        });
+        res.status(200).json({ message: "Pet successfully updated" });
       } else {
-        res.status(400).json({ Error: "Invalid Request" });
+        res.status(400).json({ error: "Invalid request to update pet" });
       }
     })
     .catch((error) => {
       console.error(error);
-      res.status(400).json({ Error: "Request to update a pet failed" });
+      res.status(400).json({ error: "Request to update a pet failed" });
     });
 });
 
@@ -97,7 +124,7 @@ app.post("/shelter", shelters.createShelter);
 // DELETE pet
 app.delete("/pets/:_id", (req, res) => {
   pets
-    .deleteById(req.params._id)
+    .deletePetById(req.params._id)
     .then((deletedCount) => {
       if (deletedCount === 1) {
         res.status(204).send();
