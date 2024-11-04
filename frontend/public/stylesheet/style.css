@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('/src/assets/images/pawprint_background.png');
+    /* background-image: url('/src/assets/images/pawprint_background.png'); */
 }
 
 .wrapper {
@@ -161,8 +161,6 @@ body {
     overflow: hidden;
 }
 
-/* this is where the button changes color/the before metalic look. change 
-gradient colors to match web aesthetic */ 
 .btn::before {
     content: '';
     position: absolute;
