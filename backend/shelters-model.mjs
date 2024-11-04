@@ -4,13 +4,8 @@
 import mongoose from "mongoose";
 import db from "./db-connection.mjs";
 
-// SCHEMA: Define the collection's schema.
+// Schema
 const shelterSchema = new mongoose.Schema({
-  shelterID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    auto: true,
-  },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed password for shelter admin login
@@ -21,26 +16,37 @@ const shelterSchema = new mongoose.Schema({
 // Model
 const shelter = mongoose.model("Shelter", shelterSchema);
 
-// CREATE Model
-const createShelter = async (req, res) => {
-  try {
-    const newShelter = new shelter(req.body);
-    await newShelter.save();
-    res.status(201).json(newShelter);
-  } catch (error) {
-    res.status(500).json({ error: "Error adding shelter. Check parameters" });
-  }
+// Create a Shelter
+const createShelter = async (body) => {
+  const newShelter = new shelter(body);
+  return await newShelter.save();
 };
 
-// Get all shelters
-const getAllShelters = async (req, res) => {
-  try {
-    const shelters = await shelter.find();
-    res.status(200).json(shelters);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching shelters" });
-  }
+// Get All Shelters
+const getAllShelters = async () => {
+  return await shelter.find();
+};
+
+// Get a Shelter by ID
+const getShelterById = async (id) => {
+  return await shelter.findById({ _id: id });
+};
+
+// Edit a Shelter by ID
+const editShelterById = async (id, body) => {
+  return await shelter.findByIdAndUpdate(id, body);
+};
+
+// Delete Shelter by ID
+const deleteShelterById = async (id) => {
+  return await shelter.deleteOne({ _id: id });
 };
 
 // EXPORT variables to use in controller file.
-export { createShelter, getAllShelters };
+export {
+  createShelter,
+  getAllShelters,
+  getShelterById,
+  editShelterById,
+  deleteShelterById,
+};
