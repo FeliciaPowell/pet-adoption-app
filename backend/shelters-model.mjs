@@ -17,62 +17,29 @@ const shelterSchema = new mongoose.Schema({
 const shelter = mongoose.model("Shelter", shelterSchema);
 
 // Create a Shelter
-const createShelter = async (req, res) => {
-  try {
-    const newShelter = new shelter(req.body);
-    await newShelter.save();
-    res.status(201).json(newShelter);
-  } catch (error) {
-    res.status(500).json({ error: "Error adding shelter. Check parameters" });
-  }
+const createShelter = async (body) => {
+  const newShelter = new shelter(body);
+  return await newShelter.save();
 };
 
 // Get All Shelters
-const getAllShelters = async (req, res) => {
-  try {
-    const shelters = await shelter.find();
-    res.status(200).json(shelters);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching shelters" });
-  }
+const getAllShelters = async () => {
+  return await shelter.find();
 };
 
 // Get a Shelter by ID
-const getShelterById = async (req, res) => {
-  try {
-    const shelters = await shelter.findById({ _id: req.params._id });
-    res.status(200).json(shelters);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching shelter" });
-  }
+const getShelterById = async (id) => {
+  return await shelter.findById({ _id: id });
 };
 
 // Edit a Shelter by ID
-const editShelterById = async (req, res) => {
-  try {
-    const updatedShelter = await shelter.findByIdAndUpdate(
-      req.params._id,
-      req.body
-    );
-
-    if (!updatedShelter) {
-      return res.status(404).json({ error: "Shelter not found" });
-    }
-
-    res.status(200).json(updatedShelter);
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching shelter" });
-  }
+const editShelterById = async (id, body) => {
+  return await shelter.findByIdAndUpdate(id, body);
 };
 
 // Delete Shelter by ID
-const deleteShelterById = async (req, res) => {
-  try {
-    const result = await shelter.deleteOne({ _id: req.params._id });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ error: "Error deleting shelter" });
-  }
+const deleteShelterById = async (id) => {
+  return await shelter.deleteOne({ _id: id });
 };
 
 // EXPORT variables to use in controller file.
