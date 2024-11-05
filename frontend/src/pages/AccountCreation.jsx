@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import 'boxicons/css/boxicons.min.css';
+// import 'boxicons/css/boxicons.min.css';
 import '/public/stylesheet/style.css';
+import Header from '../components/Header';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const LoginSignin = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -12,6 +15,8 @@ const LoginSignin = () => {
 
     return (
         <div id="login-signin-page" className={`wrapper ${isRegister ? 'active' : ''}`}>
+            <Header />
+
             <span className="bg-animate"></span>
             <span className="bg-animate2"></span>
 
@@ -21,12 +26,14 @@ const LoginSignin = () => {
                     <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
                         <input type="email" required />
                         <label>Email</label>
-                        <i className="bx bxs-envelope"></i>
+                        <i><FontAwesomeIcon icon={faEnvelope} /></i>
+                        {/* <box-icon type='solid' name='envelope'></box-icon> */}
                     </div>
                     <div className="input-box animation" style={{ '--time': 2, '--reverse-time': 23 }}>
                         <input type="password" required />
                         <label>Password</label>
-                        <i className="bx bxs-lock-alt"></i>
+                        {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
+                        <i><FontAwesomeIcon icon={faLock} /></i>
                     </div>
                     <button type="submit" className="btn animation" style={{ '--time': 3, '--reverse-time': 24 }}>Login</button>
                     <div className="logreg-link animation" style={{ '--time': 4, '--reverse-time': 25 }}>
@@ -49,17 +56,20 @@ const LoginSignin = () => {
                     <div className="input-box animation" style={{ '--time': 18, '--reverse-time': 1 }}>
                         <input type="text" required />
                         <label>Full Name</label>
-                        <i className="bx bxs-user"></i>
+                        {/* <box-icon name='user' type='solid'></box-icon> */}
+                        <i><FontAwesomeIcon icon={faUser} /></i>
                     </div>
                     <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
                         <input type="email" required />
                         <label>Email</label>
-                        <i className="bx bxs-envelope"></i>
+                        {/* <box-icon type='solid' name='envelope'></box-icon> */}
+                        <i><FontAwesomeIcon icon={faEnvelope} /></i>
                     </div>
                     <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
                         <input type="password" required />
                         <label>Password</label>
-                        <i className="bx bxs-lock-alt"></i>
+                        {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
+                        <i><FontAwesomeIcon icon={faLock} /></i>
                     </div>
                     <button type="submit" className="btn animation" style={{ '--time': 21, '--reverse-time': 4 }}>Sign Up</button>
                     <div className="logreg-link animation" style={{ '--time': 22, '--reverse-time': 5 }}>
