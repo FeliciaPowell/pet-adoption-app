@@ -6,17 +6,17 @@ const LoginSignin = () => {
     const [isRegister, setIsRegister] = useState(false);
 
     const toggleForm = () => {
-        console.log("Toggle Form Clicked!"); // Check if this logs
+        console.log("Toggle Form Clicked!");
         setIsRegister((prev) => !prev);
     };
 
     return (
-        <div className={`wrapper ${isRegister ? 'active' : ''}`}>
+        <div id="login-signin-page" className={`wrapper ${isRegister ? 'active' : ''}`}>
             <span className="bg-animate"></span>
             <span className="bg-animate2"></span>
 
             <div className={`form-box login ${isRegister ? 'hidden' : ''}`}>
-                <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>Login</h2>
+                <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>LOGIN</h2>
                 <form>
                     <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
                         <input type="email" required />
