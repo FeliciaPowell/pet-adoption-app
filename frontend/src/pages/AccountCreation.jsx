@@ -15,7 +15,6 @@ const LoginSignin = () => {
 
     return (
         <div id="login-signin-page" className={`wrapper ${isRegister ? 'active' : ''}`}>
-            <Header />
 
             <span className="bg-animate"></span>
             <span className="bg-animate2"></span>
