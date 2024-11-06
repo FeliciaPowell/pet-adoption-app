@@ -5,6 +5,8 @@ Capstone Group Project: "dating" website for pet adoption
 ## Table of Contents
 
 - [Installation](#installation)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
 
 ---
 
@@ -51,3 +53,26 @@ npm start
 ```
 
 - The console should display the port number the server is listening on and a successful database connection message.
+
+### Frontend Setup
+
+1. Open up a terminal and move to the frontend directory using `cd`. Run `npm install` to receive the latest dependencies.
+
+```
+cd frontend/
+npm install
+```
+
+2. In the frontend folder, create a new file: .env
+
+- Copy the following code into your .env:
+
+```
+VITE_API_URL=http://localhost:3000
+```
+
+3. Start the frontend terminal by typing:
+
+```
+npm run dev
+```
