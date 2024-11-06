@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import * as shelters from "./shelters-model.mjs";
+import * as users from "./users-model.mjs";
 import * as pets from "./pets-model.mjs";
 
 const PORT = process.env.PORT;
@@ -131,71 +131,71 @@ app.delete("/pets/:_id", (req, res) => {
     });
 });
 
-// Shelter Routes ************************************
+// User Routes ************************************
 
-// Get all shelters
-app.get("/shelter", (req, res) => {
-  shelters
-    .getAllShelters()
-    .then((allShelters) => {
-      res.status(200).json(allShelters);
+// Get all Users (Development Only)
+app.get("/users", (req, res) => {
+  users
+    .getAllUsers()
+    .then((allusers) => {
+      res.status(200).json(allusers);
     })
     .catch((error) => {
       console.error(error);
-      res.send({ Error: "Request to retrieve all shelters failed" });
+      res.send({ Error: "Request to retrieve all users failed" });
     });
 });
 
-// Get shelter by ID
-app.get("/shelter/:_id", (req, res) => {
-  shelters
-    .getShelterById(req.params._id)
-    .then((shelter) => {
-      res.status(200).json(shelter);
+// Get User by ID
+app.get("/users/:_id", (req, res) => {
+  users
+    .getUserById(req.params._id)
+    .then((user) => {
+      res.status(200).json(user);
     })
     .catch((error) => {
-      res.status(500).json({ error: "Error fetching shelter" });
+      res.status(500).json({ error: "Error fetching user" });
     });
 });
 
-// Update shelter
-app.put("/shelter/:_id", (req, res) => {
+// Update User
+app.put("/users/:_id", (req, res) => {
   try {
-    const updatedShelter = shelters.editShelterById(req.params._id, req.body);
+    const updateduser = users.editUserById(req.params._id, req.body);
 
-    if (!updatedShelter) {
-      return res.status(404).json({ error: "Shelter not found" });
+    if (!updateduser) {
+      return res.status(404).json({ error: "user not found" });
     }
 
-    res.status(200).json(updatedShelter);
+    res.status(200).json(updateduser);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching shelter" });
+    res.status(500).json({ error: "Error fetching user" });
   }
 });
 
-// Create shelter
-app.post("/shelter", (req, res) => {
-  shelters
-    .createShelter(req.body)
-    .then((newShelter) => {
-      res.status(201).json(newShelter);
+// Create User
+app.post("/user", (req, res) => {
+  users
+    .createUser(req.body)
+    .then((newuser) => {
+      res.status(201).json(newuser);
     })
     .catch((error) => {
       console.error(error);
-      res.send({ Error: "Error adding shelter. Check parameters" });
+      res.send({ Error: "Error adding user. Check parameters" });
     });
 });
 
-// Delete shelter
-app.delete("/shelter/:_id", (req, res) => {
-  shelters
-    .deleteShelterById(req.params._id)
+// Delete User
+app.delete("/users/:_id", (req, res) => {
+  users
+    .deleteUserById(req.params._id)
     .then((result) => {
       res.status(200).json(result);
     })
     .catch((error) => {
       console.error(error);
-      res.send({ Error: "Error deleting shelter. Check id" });
+      res.send({ Error: "Error deleting user. Check id" });
     });
 });
 
