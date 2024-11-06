@@ -1,13 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import * as shelters from "./shelters-model.mjs";
+import * as users from "./users-model.mjs";
 import * as pets from "./pets-model.mjs";
 
 const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
 
-// RETRIEVE controllers ************************************
+// PET Routes ************************************
 
 //GET all pets
 app.get("/pets", (req, res) => {
@@ -38,10 +38,6 @@ app.get("/pets/:id", (req, res) => {
       res.status(500).json({ error: "Request to retrieve pet by ID failed" });
     });
 });
-
-app.get("/shelter", shelters.getAllShelters);
-
-// CREATE controllers ************************************
 
 // CREATE pet
 app.post("/pet", (req, res) => {
@@ -78,7 +74,7 @@ app.post("/pet", (req, res) => {
     });
 });
 
-// UPDATE controller ************************************
+// UPDATE pet
 app.put("/pets/:_id", (req, res) => {
   pets
     .replacePet(
@@ -118,9 +114,6 @@ app.put("/pets/:_id", (req, res) => {
     });
 });
 
-app.post("/shelter", shelters.createShelter);
-
-// DELETE controller ************************************
 // DELETE pet
 app.delete("/pets/:_id", (req, res) => {
   pets
@@ -135,6 +128,74 @@ app.delete("/pets/:_id", (req, res) => {
     .catch((error) => {
       console.error(error);
       res.send({ error: "Request to delete a pet failed" });
+    });
+});
+
+// User Routes ************************************
+
+// Get all Users (Development Only)
+app.get("/users", (req, res) => {
+  users
+    .getAllUsers()
+    .then((allusers) => {
+      res.status(200).json(allusers);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send({ Error: "Request to retrieve all users failed" });
+    });
+});
+
+// Get User by ID
+app.get("/users/:_id", (req, res) => {
+  users
+    .getUserById(req.params._id)
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Error fetching user" });
+    });
+});
+
+// Update User
+app.put("/users/:_id", (req, res) => {
+  try {
+    const updateduser = users.editUserById(req.params._id, req.body);
+
+    if (!updateduser) {
+      return res.status(404).json({ error: "user not found" });
+    }
+
+    res.status(200).json(updateduser);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching user" });
+  }
+});
+
+// Create User
+app.post("/user", (req, res) => {
+  users
+    .createUser(req.body)
+    .then((newuser) => {
+      res.status(201).json(newuser);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send({ Error: "Error adding user. Check parameters" });
+    });
+});
+
+// Delete User
+app.delete("/users/:_id", (req, res) => {
+  users
+    .deleteUserById(req.params._id)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send({ Error: "Error deleting user. Check id" });
     });
 });
 
