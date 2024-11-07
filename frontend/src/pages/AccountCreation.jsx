@@ -23,66 +23,66 @@ const LoginSignin = () => {
                 <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>LOGIN</h2>
                 <form>
                     <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
-                        <input type="email" required />
-                        <label>Email</label>
-                        <i><FontAwesomeIcon icon={faEnvelope} /></i>
+                        <input type="text" required />
+                        <label>USERNAME</label>
+                        <i><FontAwesomeIcon icon={faUser} /></i>
                         {/* <box-icon type='solid' name='envelope'></box-icon> */}
                     </div>
                     <div className="input-box animation" style={{ '--time': 2, '--reverse-time': 23 }}>
                         <input type="password" required />
-                        <label>Password</label>
+                        <label>PASSWORD</label>
                         {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
                         <i><FontAwesomeIcon icon={faLock} /></i>
                     </div>
-                    <button type="submit" className="btn animation" style={{ '--time': 3, '--reverse-time': 24 }}>Login</button>
+                    <button type="submit" className="btn animation" style={{ '--time': 3, '--reverse-time': 24 }}>LOGIN</button>
                     <div className="logreg-link animation" style={{ '--time': 4, '--reverse-time': 25 }}>
                         <p>
-                            Don’t have an account?{' '}
-                            <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="register-link">Sign Up</a>
+                            DON'T HAVE AN ACCOUNT?{' '}
+                            <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="register-link">SIGN UP</a>
                         </p>
                     </div>
                 </form>
             </div>
 
             <div className={`info-text login ${isRegister ? 'hidden' : ''}`}>
-                <h2 className="animation" style={{ '--time': 0, '--reverse-time': 20 }}>Welcome Back!</h2>
-                <p className="animation" style={{ '--time': 1, '--reverse-time': 21 }}>Ready to meet your next furry friend?</p>
+                <h2 className="animation" style={{ '--time': 0, '--reverse-time': 20 }}>WELCOME BACK!</h2>
+                <p className="animation" style={{ '--time': 1, '--reverse-time': 21 }}>READY TO MEET YOUR NEXT FURRY FRIEND?</p>
             </div>
 
             <div className={`form-box register ${!isRegister ? 'hidden' : ''}`}>
-                <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>Sign Up</h2>
+                <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>SIGN UP</h2>
                 <form>
                     <div className="input-box animation" style={{ '--time': 18, '--reverse-time': 1 }}>
                         <input type="text" required />
-                        <label>Full Name</label>
+                        <label>USERNAME</label>
                         {/* <box-icon name='user' type='solid'></box-icon> */}
                         <i><FontAwesomeIcon icon={faUser} /></i>
                     </div>
                     <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
                         <input type="email" required />
-                        <label>Email</label>
+                        <label>EMAIL</label>
                         {/* <box-icon type='solid' name='envelope'></box-icon> */}
                         <i><FontAwesomeIcon icon={faEnvelope} /></i>
                     </div>
                     <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
                         <input type="password" required />
-                        <label>Password</label>
+                        <label>PASSWORD</label>
                         {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
                         <i><FontAwesomeIcon icon={faLock} /></i>
                     </div>
-                    <button type="submit" className="btn animation" style={{ '--time': 21, '--reverse-time': 4 }}>Sign Up</button>
+                    <button type="submit" className="btn animation" style={{ '--time': 21, '--reverse-time': 4 }}>SIGN UP</button>
                     <div className="logreg-link animation" style={{ '--time': 22, '--reverse-time': 5 }}>
                         <p>
-                            Already have an account?{' '}
-                            <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="login-link">Login</a>
+                            ALREADY HAVE AN ACCOUNT?{' '}
+                            <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="login-link">LOGIN</a>
                         </p>
                     </div>
                 </form>
             </div>
 
             <div className={`info-text register ${!isRegister ? 'hidden' : ''}`}>
-                <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>Hello!</h2>
-                <p className="animation" style={{ '--time': 18, '--reverse-time': 1 }}>Join us and start your journey to finding your purrrfect pet!</p>
+                <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>HELLO!</h2>
+                <p className="animation" style={{ '--time': 18, '--reverse-time': 1 }}>JOIN US AND START FINDING YOUR PURRRFECT PET!</p>
             </div>
         </div>
     );
