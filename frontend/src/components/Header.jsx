@@ -1,11 +1,13 @@
 import React from 'react';
 import logo from '../assets/logo.png';
-
+import { Link } from 'react-router-dom';
 const Header = () => {
   return (
       <header style={styles.header}>
         <div style={styles.logoContainer}>
-          <img src={logo} alt="Purrrfect Match Logo" style={styles.logo} />
+          <Link to="/" style={styles.logoLink}>
+            <img src={logo} alt="Purrrfect Match Logo" style={styles.logo} />
+          </Link>
         </div>
         <button style={styles.loginButton}>LOGIN</button>
         <div style={topStripe}></div>
@@ -18,11 +20,12 @@ const styles = {
   header: {
     backgroundColor: '#E0E9EB',
     height: '30vh',
-    width: '100%',
-    position: 'absolute',
+    width: '100vw',
+    position: 'fixed',
     top: '0',
     left: '0',
     right: '0',
+    zIndex: '1000',
   },
   loginButton: {
     position: 'absolute',
