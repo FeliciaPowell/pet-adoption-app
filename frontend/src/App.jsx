@@ -17,7 +17,8 @@ import PetProfile from "./pages/PetProfile";
 import ShelterListings from "./pages/ShelterListings";
 import ShelterManagement from "./pages/ShelterManagement";
 import Layout from "./components/Layout.jsx";
-
+import MoreInfoAdopters from "./pages/MoreInfoAdopters.jsx";
+import MoreInfoShelters from "./pages/MoreInfoShelters.jsx";
 function App() {
   return (
     <>
@@ -36,6 +37,8 @@ function App() {
             <Route path="/pet" element={<PetProfile />} />
             <Route path="/shelters" element={<ShelterListings />} />
             <Route path="/shelter_management" element={<ShelterManagement />} />
+            <Route path="/more_info_adopters" element={<MoreInfoAdopters />} />
+            <Route path="/more_info_shelters" element={<MoreInfoShelters />} />
           </Routes>
         </Layout>
       </Router>
