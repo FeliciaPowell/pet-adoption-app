@@ -5,9 +5,7 @@ const Footer = () => {
     return (
         <footer style={styles.footer}>
             <div style={styles.topStripe}></div>
-            <a href="/" style={styles.logoLink}>
-                <img src={logo} alt="Company Logo" style={styles.logo} />
-            </a>
+            <p style={styles.footerText}>Your footer text here</p>
         </footer>
     );
 };
@@ -32,9 +30,16 @@ const styles = {
         textDecoration: 'none'
     },
     logo: {
-        marginTop: '40px',
+        marginTop: '20px',
         zIndex: '3',
         height: '22vh'
+    },
+    footerText: {
+        marginTop: '10px',
+        color: 'black',
+        zIndex: '3',
+        backgroundColor: '#E0E9EB',
+        textAlign: 'center',
     },
     topStripe: {
         backgroundColor: 'black',

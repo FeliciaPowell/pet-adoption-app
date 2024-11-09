@@ -1,9 +1,11 @@
-// Admin Dashboard
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const AdminDashboard = () => {
   return (
-    <div>AdminDashboard</div>
+      <Layout footerType="default">
+        {/* Page content here */}
+      </Layout>
   )
 }
 

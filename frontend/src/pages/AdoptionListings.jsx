@@ -1,9 +1,12 @@
 // Adoption Listings: Main pet listing page with filters?
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const AdoptionListings = () => {
   return (
-    <div>AdoptionListings</div>
+      <Layout footerType="default">
+        {/* Page content here */}
+      </Layout>
   )
 }
 

@@ -1,9 +1,12 @@
 // Person Profile
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const PersonProfile = () => {
   return (
-    <div>PersonProfile</div>
+      <Layout footerType="default">
+        {/* Page content here */}
+      </Layout>
   )
 }
 

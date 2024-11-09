@@ -3,20 +3,16 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Layout from "../components/Layout.jsx";
 
 // PetListings component to display all pets available for adoption in a card view
 
 // will update this to card views for pet listings
 const PetListings = () => {
   return (
-    <>
-      <div>PetListings</div>
-      <h2>Pet Listings for Adoption</h2>
-      <p>
-        In progress: Will transfer draft code here after new components and Code
-        Review #2.
-      </p>
-    </>
+      <Layout footerType="default">
+          {/* Page content here */}
+      </Layout>
   );
 };
 

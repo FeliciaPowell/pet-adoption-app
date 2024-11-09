@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
-import teaserLogo from "../assets/teaser.jpg";
-import Layout from "../components/Layout.jsx";
+// In a landing page component
+import Layout from '../components/Layout';
 
-const LandingPage = () => { return };
+const LandingPage = () => (
+    <Layout footerType="landing">
+        {/* Page content here */}
+    </Layout>
+);
+
 export default LandingPage;
