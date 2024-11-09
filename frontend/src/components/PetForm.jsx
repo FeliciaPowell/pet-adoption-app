@@ -1,4 +1,4 @@
-// PetForm lives inside of the AddPetProfile.jsx page
+// PetForm lives inside of the AddPet.jsx page
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

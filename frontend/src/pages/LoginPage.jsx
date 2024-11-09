@@ -1,9 +1,12 @@
 // Login Page
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
+      <Layout footerType="default">
+        {/* Page content here */}
+      </Layout>
   )
 }
 
