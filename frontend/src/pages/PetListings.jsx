@@ -9,11 +9,32 @@ import Layout from "../components/Layout.jsx";
 
 // will update this to card views for pet listings
 const PetListings = () => {
-  return (
-      <Layout footerType="default">
-          {/* Page content here */}
-      </Layout>
-  );
+  // State to hold the list of pets
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch pets data from the API
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        // Make the GET request
+        const response = await axios.get("http://localhost:3000/pets");
+        // Set the pets data in state
+        setPets(response.data);
+        console.log(response.data);
+        console.log(pets);
+      } catch (error) {
+        setError("Failed to fetch pets");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
+  return <Layout footerType="default">{/* Page content here */}</Layout>;
 };
 
 export default PetListings;

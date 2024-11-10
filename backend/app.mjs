@@ -1,10 +1,15 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors"; // Import cors
 import * as users from "./users-model.mjs";
 import * as pets from "./pets-model.mjs";
 
 const PORT = process.env.PORT;
 const app = express();
+app.use(express.json());
+
+// Enable CORS
+app.use(cors({ origin: "http://127.0.0.1:5173" })); // or use '*' for all origins
 app.use(express.json());
 
 // PET Routes ************************************
