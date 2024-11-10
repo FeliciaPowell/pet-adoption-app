@@ -35,6 +35,10 @@ const PetListings = () => {
 
     fetchPets();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <Layout footerType="default">
       <h1>Adoption Listings</h1>

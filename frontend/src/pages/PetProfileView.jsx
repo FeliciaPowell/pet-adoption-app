@@ -9,12 +9,41 @@ import Layout from "../components/Layout.jsx";
 
 const PetProfileView = () => {
   const { _id } = useParams();
-  const petData = {}; // placeholder for pet data
+  const [petData, setPetData] = useState(null); // State to hold pet data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPetData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/pets/${_id}`);
+        setPetData(response.data); // Store pet data in state
+      } catch (error) {
+        setError("Failed to fetch pet data");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPetData();
+  }, [_id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
-      <Layout footerType="default">
-          {/* Page content here */}
-      </Layout>
+    <Layout footerType="default">
+      <div className="pet-profile">
+        <h1>{petData.name}</h1>
+        <p>Type: {petData.type}</p>
+        <p>Breed: {petData.breed}</p>
+        <p>Age: {petData.age} years</p>
+        <p>Gender: {petData.gender}</p>
+        <p>Description: {petData.description}</p>
+        {/* Display additional pet attributes as needed */}
+      </div>
+    </Layout>
   );
 };
 
