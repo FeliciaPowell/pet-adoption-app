@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layout.jsx";
+import PetListing from "../components/PetListing.jsx";
 
 // PetListings component to display all pets available for adoption in a card view
 
@@ -34,7 +35,20 @@ const PetListings = () => {
 
     fetchPets();
   }, []);
-  return <Layout footerType="default">{/* Page content here */}</Layout>;
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <Layout footerType="default">
+      <h1>Adoption Listings</h1>
+      <div className="pet-listings">
+        {pets.map((pet) => (
+          <PetListing key={pet._id} pet={pet} />
+        ))}
+      </div>
+    </Layout>
+  );
 };
 
 export default PetListings;
