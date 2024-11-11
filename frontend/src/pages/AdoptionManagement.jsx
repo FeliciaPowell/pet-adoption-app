@@ -1,9 +1,12 @@
 // Profile management screen for adopters
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const AdoptionManagement = () => {
   return (
-    <div>AdoptionManagement</div>
+      <Layout footerType="default">
+        {/* Page content here */}
+      </Layout>
   )
 }
 

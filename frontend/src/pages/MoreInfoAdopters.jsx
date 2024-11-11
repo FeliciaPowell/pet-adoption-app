@@ -1,9 +1,12 @@
 // Person Profile
 import React from 'react'
+import Layout from "../components/Layout.jsx";
 
 const MoreInfoAdopters = () => {
     return (
-        <div>More Info For Adopters</div>
+        <Layout footerType="default">
+            {/* Page content here */}
+        </Layout>
     )
 }
 

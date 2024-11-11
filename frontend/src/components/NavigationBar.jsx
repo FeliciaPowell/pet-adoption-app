@@ -117,11 +117,11 @@ const styles = {
         padding: '0.5rem 1rem',
         width: '100vw',
         position: 'fixed',
-        top: '30vh',
+        top: '200px',
         left: '0',
         zIndex: '999',
         borderBottom: '4px solid black',
-        height: '3rem',
+        height: '2rem',
     },
     navLeft: {
         display: 'flex',
@@ -134,8 +134,8 @@ const styles = {
         marginRight: '0.5rem',
     },
     logo: {
-        width: '1.5rem',
-        height: '1.5rem',
+        width: '1.0rem',
+        height: '1.0rem',
     },
     navRight: {
         listStyle: 'none',
@@ -150,7 +150,7 @@ const styles = {
     navLink: {
         color: 'black',
         textDecoration: 'none',
-        fontSize: '1.5rem',
+        fontSize: '1.0rem',
         transition: 'color 0.3s ease',
     },
     navLinkHover: {

@@ -1,16 +1,13 @@
-// src/components/Footer.jsx
 import React from 'react';
 import logo from '../assets/logo.png';
 
-
-const Footer = ({showLogo, footerText}) => {
+const Footer = () => {
     return (
         <footer style={styles.footer}>
             <div style={styles.topStripe}></div>
-            <div style={styles.footerContent}>
-                {showLogo && <img src={logo} alt="Purrrfect Match Logo" style={styles.logo} />}
-                {footerText && <p style={styles.footerText}>{footerText}</p>}
-            </div>
+            <a href="/" style={styles.logoLink}>
+                <img src={logo} alt="Company Logo" style={styles.logo} />
+            </a>
         </footer>
     );
 };
@@ -18,39 +15,33 @@ const Footer = ({showLogo, footerText}) => {
 const styles = {
     footer: {
         backgroundColor: '#E0E9EB',
-        height: '18vh',
+        height: '120px',
         width: '100%',
-        position: 'absolute',
+        position: 'fixed',
         bottom: '0',
         left: '0',
         right: '0',
         zIndex: '1',
-    },
-    footerContent: {
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
-        zIndex: '2',
+        flexDirection: 'column',
+        paddingBottom: '20px',
+    },
+    logoLink: {
+        textDecoration: 'none'
     },
     logo: {
-        marginTop: '20px',
-        height: '20vh',
-        zIndex: '3'
-    },
-    footerText: {
-        marginTop: '20px',
-        color: 'black',
+        marginTop: '40px',
         zIndex: '3',
-        backgroundColor: '#E0E9EB',
+        height: '150px'
     },
     topStripe: {
         backgroundColor: 'black',
         height: '4px',
         width: '100%',
         position: 'absolute',
-        bottom: '18vh'
+        top: '0'
     }
 };
 
