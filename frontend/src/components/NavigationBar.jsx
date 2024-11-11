@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import pawPrintLogo from '../assets/paw-print-logo.png';
+import pawPrintLogo from '../assets/pawPrintLogo.png';
 
 const NavBar = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
