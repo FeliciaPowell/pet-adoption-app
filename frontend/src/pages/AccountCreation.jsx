@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 // import 'boxicons/css/boxicons.min.css';
-import '/public/stylesheet/style.css';
-import Header from '../components/Header';
+import "/styles/style.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
