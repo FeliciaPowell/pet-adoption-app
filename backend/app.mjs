@@ -1,9 +1,12 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors"; // Import cors
+import jwt from "jsonwebtoken";
 import * as users from "./users-model.mjs";
 import * as pets from "./pets-model.mjs";
+import * as hash from "./hash.mjs";
 
+const JWT_SECRET = process.env.JWT_SECRET;
 const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
@@ -11,6 +14,69 @@ app.use(express.json());
 // Enable CORS
 app.use(cors({ origin: "http://127.0.0.1:5173" })); // or use '*' for all origins
 app.use(express.json());
+
+// Login Functions and Route ************************************
+
+// Creates Token to send to FrontEnd
+const createToken = (user) => {
+  return jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
+};
+
+// Authenticates User's with Token for Routes
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401); // Token not found
+  }
+
+  // Verify Token
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403); // Invalid Token
+    req.user = user;
+    next();
+  });
+};
+
+// Verify Admin Role
+const isAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Access DeniedL Admin only" });
+  }
+  next();
+};
+
+// Test Route (DELETE)
+app.get("/protected", authenticateToken, (req, res) => {
+  res.json({ message: "This is a protected route", user: req.user });
+});
+
+// Test Route (DELETE)
+app.get("/admin", authenticateToken, isAdmin, (req, res) => {
+  res.json({ message: "This is an admin route", user: req.user });
+});
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  users
+    .getUserByEmail(email)
+    .then((user) => {
+      // Check the password
+      if (hash.checkHash(password, user[0].password)) {
+        // Create Token
+        const token = createToken(user[0]);
+        res.json({ token });
+      } else {
+        // Password Incorrect
+        res.send({ Error: "Password is incorrect" });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send({ Error: "Email is not found in database" });
+    });
+});
 
 // PET Routes ************************************
 
@@ -152,7 +218,7 @@ app.get("/users", (req, res) => {
 });
 
 // Get User by ID
-app.get("/users/:_id", (req, res) => {
+app.get("/users/id/:_id", (req, res) => {
   users
     .getUserById(req.params._id)
     .then((user) => {
