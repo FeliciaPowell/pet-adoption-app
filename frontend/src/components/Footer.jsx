@@ -15,7 +15,7 @@ const Footer = () => {
 const styles = {
     footer: {
         backgroundColor: '#E0E9EB',
-        height: '20%', // Footer height for spacing
+        height: '120px',
         width: '100%',
         position: 'fixed',
         bottom: '0',
@@ -34,7 +34,7 @@ const styles = {
     logo: {
         marginTop: '40px',
         zIndex: '3',
-        height: '22vh'
+        height: '150px'
     },
     topStripe: {
         backgroundColor: 'black',
