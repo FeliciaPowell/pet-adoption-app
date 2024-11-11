@@ -42,6 +42,11 @@ const getUserById = async (id) => {
   return await User.findById({ _id: id });
 };
 
+// Get a User by Email
+const getUserByEmail = async (email) => {
+  return await User.find({ email: email });
+};
+
 // Edit a User by ID
 const editUserById = async (id, body) => {
   return await User.findByIdAndUpdate(id, body, { new: true });
@@ -52,4 +57,11 @@ const deleteUserById = async (id) => {
   return await User.deleteOne({ _id: id });
 };
 
-export { createUser, getAllUsers, getUserById, editUserById, deleteUserById };
+export {
+  createUser,
+  getAllUsers,
+  getUserById,
+  getUserByEmail,
+  editUserById,
+  deleteUserById,
+};
