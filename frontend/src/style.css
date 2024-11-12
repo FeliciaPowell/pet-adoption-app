@@ -14,7 +14,6 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url("/src/assets/images/pawprint_background.png");
     background: #6F94F1;
     font-family: 'Hammersmith One';
 
@@ -25,6 +24,7 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Modak';
     color: #222;
     letter-spacing: 2px;
+    font-weight: 100;
 }
 
 .wrapper {
@@ -35,21 +35,28 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 25px #E0E9EB;
     overflow: hidden;
     background: transparent;
+    padding-top: -20px;
 }
 
 .wrapper .form-box {
     position: absolute;
-    top: 0;
+    top: -20px;
     width: 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-top: 0px;
 }
 
 .wrapper .form-box.login {
     left: 0;
     padding: 0 60px 0 40px;
+}
+
+.wrapper .form-box.login h2 {
+    font-size: 36px;
+    color: #000000;
 }
 
 .wrapper .form-box.login .animation {
@@ -71,6 +78,12 @@ h1, h2, h3, h4, h5, h6 {
     right: 0;
     padding: 0 40px 0 60px;
     pointer-events: none;
+    margin-top: -20px;
+}
+
+.wrapper .form-box.register h2 {
+    font-size: 36px;
+    color: #000000;
 }
 
 .wrapper.active .form-box.register {
@@ -93,7 +106,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-box h2 {
-    font-size: 32px;
     color: #000000;
     text-align: center;
 }
@@ -101,8 +113,8 @@ h1, h2, h3, h4, h5, h6 {
 .form-box .input-box {
     position: relative;
     width: 100%;
-    height: 50px;
-    margin: 25px 0;
+    height: 30px;
+    margin: 30px 0;
 }
 
 .input-box input {
@@ -141,7 +153,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #E0E9EB;
 }
 
-.input-box  i {
+.input-box i {
     position: absolute;
     top: 50%;
     right: 0;
@@ -156,49 +168,53 @@ h1, h2, h3, h4, h5, h6 {
     color: #E0E9EB;
 }
 
-.btn {
-    position: relative;
-    width: 100%;
-    height: 45px;
-    background: transparent;
-    border: 2px solid #000000;
-    outline: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    color: #000000;
-    font-weight: 600;
-    z-index: 1;
-    overflow: hidden;
+.wrapper .form-box.login .btn {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition: transform 0.8s ease, opacity 0.8s ease, filter 0.8s ease;
+    transition-delay: calc(0.1s * var(--reverse-time));
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 300%;
-    background: linear-gradient(#6f94f1, #E0E9EB, #6f94f1, #E0E9EB);
-    z-index: -1;
-    transition: .5s;
+.wrapper.active .form-box.login .btn {
+    transform: translateX(-100%);
+    opacity: 0;
+    filter: blur(8px);
+    transition-duration: 0.6s; 
+    transition-delay: calc(0.1s * var(--time));
 }
 
-.btn:hover::before {
-    top: 0;
+.wrapper .form-box.register .btn {
+    transform: translateX(100%);
+    opacity: 0;
+    filter: blur(8px);
+    transition: transform 0.9s ease, opacity 0.9s ease, filter 0.9s ease;
+    transition-delay: calc(0.1s * var(--reverse-time));
 }
 
-.form-box .logreg-link {
-    font-size: 15px;
+.wrapper.active .form-box.register .btn {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-duration: 0.9s; 
+    transition-delay: calc(0.1s * var(--time)); 
+}
+
+.form-box .btn {
+    width: auto;
+    margin: 20px auto; 
+    display: block;
+}
+
+.logreg-link p {
+    font-size: 14px;
     color: #000000;
     text-align: center;
     margin: 20px 0 10px;
 }
 
 .logreg-link p a {
-    color: #E0E9EB;
-    text-decoration: none;
-    font-weight: 600;
+    color: #fff;
 }
 
 .logreg-link p a:hover {
@@ -310,4 +326,194 @@ h1, h2, h3, h4, h5, h6 {
 .wrapper.active .bg-animate2 {
     transform: rotate(-11deg) skewY(-41deg);
     transition-delay: 1.2s;
+}
+
+/* ------------------------------------------ */
+/* This here is the css for account creation: */
+/* ------------------------------------------ */
+
+.account-wrapper {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    border: 2px solid #E0E9EB;
+    box-shadow: 0 0 25px #E0E9EB;
+    overflow: hidden;
+    background: transparent;
+    padding-top: -20px;
+}
+
+.create-account-header ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin-bottom: 30px;
+}
+
+.create-account-header ul li {
+    margin: 0 15px;
+    text-align: center;
+}
+
+.create-account-header ul li div {
+    margin-top: 15px;
+    width: 50px;
+    height: 50px;
+    background: #ddd;
+    color: #000000;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.create-account-header ul li.active div {
+    background: #000000;
+    color: #fff;
+}
+
+.form-box {
+    text-align: center;
+    padding: 0 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    height: calc(100% - 80px); /* Deducting space for buttons */
+}
+
+.form-box h2 {
+    font-size: 36px;
+    color: #000000;
+    font-weight: 100;
+}
+
+/* In your CSS file */
+.heading-margin {
+    margin-bottom: -45px;
+}
+
+
+.input-box {
+    margin: 15px 0;
+    position: relative;
+}
+
+/* Keep buttons at the bottom of account-wrapper */
+.btns-wrap {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.btn-back,
+.btn-next {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Custom checkbox styles */
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #000000;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.checkbox-group label input[type="checkbox"] {
+    /* Hide the default checkbox */
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background-color: #E0E9EB;
+    border-radius: 4px;
+    border: 2px solid #000000;
+    margin-right: 15px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.checkbox-group label input[type="checkbox"]:checked {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.checkbox-group label input[type="checkbox"]:checked::before {
+    content: '✔';
+    font-size: 18px;
+    color: #E0E9EB;
+    position: absolute;
+    top: 0;
+    left: 4px;
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-wrapper .shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.modal-wrapper .success-wrap {
+    position: relative;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+    transition: transform 0.5s ease;
+}
+
+.modal-wrapper .success-wrap .modal-icon {
+    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #6F94F1;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    rotate: -15deg;
+}
+
+.modal-wrapper.active {
+    visibility: visible;
+}
+
+.modal-wrapper.active .shadow {
+    opacity: 0.8;
+}
+
+.modal-wrapper.active .success-wrap {
+    transform: translateY(0);
 }

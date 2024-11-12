@@ -1,92 +1,167 @@
-import React, { useState } from 'react';
-// import 'boxicons/css/boxicons.min.css';
-import "/styles/style.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+// Importing necessary dependencies and components
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../style.css";
 import Layout from "../components/Layout.jsx";
-const LoginSignin = () => {
-    const [isRegister, setIsRegister] = useState(false);
+import Button from "../components/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaw } from "@fortawesome/free-solid-svg-icons";
 
-    const toggleForm = () => {
-        console.log("Toggle Form Clicked!");
-        setIsRegister((prev) => !prev);
-    };
+const AccountCreation = () => {
+  // Using React Router hooks to manage navigation and URL location
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    return (
-        <Layout footerType="default">
-            <div id="login-signin-page" className={`wrapper ${isRegister ? 'active' : ''}`}>
+  // Defining state for tracking the current step, user choice status, and modal visibility
+  const [currentStep, setCurrentStep] = useState(1);
+  const [userStatus, setUserStatus] = useState(null);
+  const [isModalActive, setIsModalActive] = useState(false);
 
-                <span className="bg-animate"></span>
-                <span className="bg-animate2"></span>
+  // Effect to set the step based on URL parameters
+  useEffect(() => {
+    const stepFromUrl = new URLSearchParams(location.search).get("step");
+    if (stepFromUrl) {
+      setCurrentStep(parseInt(stepFromUrl, 10));
+    } else {
+      navigate("?step=1", { replace: true });
+    }
+  }, [location.search, navigate]);
 
-                <div className={`form-box login ${isRegister ? 'hidden' : ''}`}>
-                    <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>LOGIN</h2>
-                    <form>
-                        <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
-                            <input type="text" required />
-                            <label>USERNAME</label>
-                            <i><FontAwesomeIcon icon={faUser} /></i>
-                            {/* <box-icon type='solid' name='envelope'></box-icon> */}
-                        </div>
-                        <div className="input-box animation" style={{ '--time': 2, '--reverse-time': 23 }}>
-                            <input type="password" required />
-                            <label>PASSWORD</label>
-                            {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
-                            <i><FontAwesomeIcon icon={faLock} /></i>
-                        </div>
-                        <button type="submit" className="btn animation" style={{ '--time': 3, '--reverse-time': 24 }}>LOGIN</button>
-                        <div className="logreg-link animation" style={{ '--time': 4, '--reverse-time': 25 }}>
-                            <p>
-                                DON'T HAVE AN ACCOUNT?{' '}
-                                <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="register-link">SIGN UP</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+  // Handler for selecting "Want to Adopt" option, moves to step 2
+  const handleChoice1 = () => {
+    setUserStatus("Want to Adopt");
+    setCurrentStep(2);
+    navigate(`?step=2`);
+  };
 
-                <div className={`info-text login ${isRegister ? 'hidden' : ''}`}>
-                    <h2 className="animation" style={{ '--time': 0, '--reverse-time': 20 }}>WELCOME BACK!</h2>
-                    <p className="animation" style={{ '--time': 1, '--reverse-time': 21 }}>READY TO MEET YOUR NEXT FURRY FRIEND?</p>
-                </div>
+  // Handler for selecting "Create a Shelter" option, moves to step 2
+  const handleChoice2 = () => {
+    setUserStatus("Create a Shelter");
+    setCurrentStep(2);
+    navigate(`?step=2`);
+  };
 
-                <div className={`form-box register ${!isRegister ? 'hidden' : ''}`}>
-                    <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>SIGN UP</h2>
-                    <form>
-                        <div className="input-box animation" style={{ '--time': 18, '--reverse-time': 1 }}>
-                            <input type="text" required />
-                            <label>USERNAME</label>
-                            {/* <box-icon name='user' type='solid'></box-icon> */}
-                            <i><FontAwesomeIcon icon={faUser} /></i>
-                        </div>
-                        <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
-                            <input type="email" required />
-                            <label>EMAIL</label>
-                            {/* <box-icon type='solid' name='envelope'></box-icon> */}
-                            <i><FontAwesomeIcon icon={faEnvelope} /></i>
-                        </div>
-                        <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
-                            <input type="password" required />
-                            <label>PASSWORD</label>
-                            {/* <box-icon name='lock-alt' type='solid'></box-icon> */}
-                            <i><FontAwesomeIcon icon={faLock} /></i>
-                        </div>
-                        <button type="submit" className="btn animation" style={{ '--time': 21, '--reverse-time': 4 }}>SIGN UP</button>
-                        <div className="logreg-link animation" style={{ '--time': 22, '--reverse-time': 5 }}>
-                            <p>
-                                ALREADY HAVE AN ACCOUNT?{' '}
-                                <a href="#" onClick={(e) => { e.preventDefault(); toggleForm(); }} className="login-link">LOGIN</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+  // Handler for "Next" button, moves to the next step, or shows modal if on last step
+  const handleNext = () => {
+    if (currentStep < 3) {
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      navigate(`?step=${nextStep}`);
+    } else {
+      setIsModalActive(true); // Show modal on "Complete"
+    }
+  };
 
-                <div className={`info-text register ${!isRegister ? 'hidden' : ''}`}>
-                    <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>HELLO!</h2>
-                    <p className="animation" style={{ '--time': 18, '--reverse-time': 1 }}>JOIN US AND START FINDING YOUR PURRRFECT PET!</p>
-                </div>
+  // Handler for "Back" button, moves to the previous step
+  const handleBack = () => {
+    if (currentStep > 1) {
+      const prevStep = currentStep - 1;
+      setCurrentStep(prevStep);
+      navigate(`?step=${prevStep}`);
+    }
+  };
+
+  // Closes the modal and redirects the user after completion
+  const closeModal = () => {
+    setIsModalActive(false);
+    navigate("/"); // Redirect or reset after completion if needed
+  };
+
+  return (
+    <Layout footerType="default">
+      <div className="account-wrapper">
+        {/* Progress Bar Header */}
+        <div className="create-account-header">
+          <ul>
+            <li className={`form-1-progressbar ${currentStep >= 1 ? "active" : ""}`}>
+              <div><p>1</p></div>
+            </li>
+            <li className={`form-2-progressbar ${currentStep >= 2 ? "active" : ""}`}>
+              <div><p>2</p></div>
+            </li>
+            <li className={`form-3-progressbar ${currentStep >= 3 ? "active" : ""}`}>
+              <div><p>3</p></div>
+            </li>
+          </ul>
+        </div>
+
+        {/* Modal for Completion */}
+        {isModalActive && (
+          <div className="modal-wrapper active">
+            <div className="shadow" onClick={closeModal}></div>
+            <div className="success-wrap">
+              <span className="modal-icon">
+                <FontAwesomeIcon icon={faPaw} />
+              </span>
+              <p>You have successfully completed the process.</p>
             </div>
-        </Layout>
-    );
+          </div>
+        )}
+
+        {/* Form Content */}
+        <div className="form-wrap">
+          {/* Step 1: Choose an Option */}
+          {currentStep === 1 && (
+            <div className="form-box">
+              <h2>Do You</h2>
+              <Button onClick={handleChoice1} className="btn-choice">Want to Adopt</Button>
+              <h3>OR</h3>
+              <Button onClick={handleChoice2} className="btn-choice">Create a Shelter</Button>
+            </div>
+          )}
+          {/* Step 2: Personal Info Form */}
+          {currentStep === 2 && (
+            <div className="form-box">
+              <h2 className="heading-margin">Personal Info</h2>
+              <form>
+                <div className="input-box"><input type="text" required /><label>First Name</label></div>
+                <div className="input-box"><input type="text" required /><label>Last Name</label></div>
+                <div className="input-box"><input type="text" required /><label>Address Line 1</label></div>
+                <div className="input-box">
+                    <input
+                        type="text"
+                        placeholder=""
+                        onFocus={(e) => {
+                        e.target.type = "date"; // Show date picker on focus
+                        e.target.placeholder = "mm/dd/yyyy"; // Show placeholder on focus
+                        }}
+                        onBlur={(e) => {
+                        e.target.type = e.target.value ? "date" : "text"; // Keep type as date if a value exists
+                        e.target.placeholder = ""; // Remove placeholder on blur
+                        }}
+                        required
+                    />
+                    <label>Birthday</label>
+                </div>
+              </form>
+            </div>
+          )}
+          {/* Step 3: Checkbox Group for Additional Info */}
+          {currentStep === 3 && (
+            <div className="form-box">
+              <h2>Do You Have</h2>
+              <form className="checkbox-group">
+                <label><input type="checkbox" /> Do you have kids?</label>
+                <label><input type="checkbox" /> Do you have cats?</label>
+                <label><input type="checkbox" /> Do you have dogs?</label>
+                <label><input type="checkbox" /> Do you have other pets?</label>
+              </form>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="btns-wrap">
+          {currentStep > 1 && <Button onClick={handleBack} className="btn-back">Back</Button>}
+          {currentStep < 3 ? (
+            <Button onClick={handleNext} className="btn-next">Next</Button>
+          ) : (
+            <Button onClick={handleNext} className="btn-complete">Complete</Button>
+          )}
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
-export default LoginSignin;
+export default AccountCreation;
