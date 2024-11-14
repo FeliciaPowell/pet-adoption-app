@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 25px #E0E9EB;
     overflow: hidden;
     background: transparent;
-    padding-top: -20px;
+    margin-top: 60px;
 }
 
 .wrapper .form-box {
@@ -340,7 +340,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 25px #E0E9EB;
     overflow: hidden;
     background: transparent;
-    padding-top: -20px;
+    margin-top: 60px;
 }
 
 .create-account-header ul {
