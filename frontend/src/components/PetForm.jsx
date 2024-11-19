@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
-import imageCompression from "browser-image-compression";
+// import imageCompression from "browser-image-compression";
 
 // PetForm component handles the form submission for adding a new pet with various details.
 const PetForm = () => {
