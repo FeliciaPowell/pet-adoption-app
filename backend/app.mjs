@@ -42,7 +42,7 @@ const authenticateToken = (req, res, next) => {
 // Verify Admin Role
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Access DeniedL Admin only" });
+    return res.status(403).json({ message: "Access Denied Admin only" });
   }
   next();
 };

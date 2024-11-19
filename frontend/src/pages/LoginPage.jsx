@@ -28,9 +28,9 @@ const LoginSignin = () => {
                     <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>LOGIN</h2>
                     <form>
                         <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
-                            <input type="text" required />
-                            <label>USERNAME</label>
-                            <i><FontAwesomeIcon icon={faUser} /></i>
+                            <input type="email" required />
+                            <label>EMAIL</label>
+                            <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
                         <div className="input-box animation" style={{ '--time': 2, '--reverse-time': 23 }}>
                             <input type="password" required />
@@ -60,18 +60,18 @@ const LoginSignin = () => {
                     <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>SIGN UP</h2>
                     <form>
                         <div className="input-box animation" style={{ '--time': 18, '--reverse-time': 1 }}>
-                            <input type="text" required />
-                            <label>USERNAME</label>
-                            <i><FontAwesomeIcon icon={faUser} /></i>
-                        </div>
-                        <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
                             <input type="email" required />
                             <label>EMAIL</label>
                             <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
-                        <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
+                        <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
                             <input type="password" required />
                             <label>PASSWORD</label>
+                            <i><FontAwesomeIcon icon={faLock} /></i>
+                        </div>
+                        <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
+                            <input type="password" required />
+                            <label>CONFIRM PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
                         </div>
                         <Link to="/account">
