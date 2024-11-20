@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import "../style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +10,65 @@ import Button from "../components/Button";
 const LoginSignin = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [isRegister, setIsRegister] = useState(false);
+    const [isRegister, setIsRegister] = useState(false); // Determines login or register mode
+    const [email, setEmail] = useState(''); // Holds email input
+    const [password, setPassword] = useState(''); // Holds password input
+    const [confirmPassword, setConfirmPassword] = useState(''); // Confirm password field for registration
+    const [error, setError] = useState(''); // Error message for user feedback
+
+    const handleEmailChange = (event) => setEmail(event.target.value);
+    const handlePasswordChange = (event) => setPassword(event.target.value);
+    const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
+
+    // Login function
+    const sendLoginData = async (e) => {
+        e.preventDefault(); // Prevents form submission
+        setError(''); // Clears any previous errors
+
+        try {
+            const userData = { email, password };
+            const response = await axios.post(`http://localhost:3000/login`, userData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.data.token) {
+                localStorage.setItem("token", response.data.token); // Save token to localStorage
+                navigate('/dashboard'); // Navigate to the dashboard
+            } else {
+                setError('Login failed. Please check your credentials.');
+            }
+        } catch (error) {
+            setError('Failed to log in. Please check your credentials.');
+            console.error("Login error:", error);
+        }
+    };
+
+    // Registration function
+    const sendRegisterData = async (e) => {
+        e.preventDefault(); // Prevents form submission
+        setError(''); // Clears any previous errors
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match!');
+            return;
+        }
+
+        try {
+            const userData = { email, password };
+            const response = await axios.post(`http://localhost:3000/user`, userData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.status === 201) {
+                navigate('/account', { state: { email } }); // Navigate to account creation
+            } else {
+                setError('Registration failed. Please try again.');
+            }
+        } catch (error) {
+            setError("Failed to register user.");
+            console.error("Registration error:", error);
+        }
+    };
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -26,18 +85,18 @@ const LoginSignin = () => {
                 {/* Login Form */}
                 <div className={`form-box login ${isRegister ? 'hidden' : ''}`}>
                     <h2 className="animation" style={{ '--time': 0, '--reverse-time': 21 }}>LOGIN</h2>
-                    <form>
+                    <form onSubmit={sendLoginData}>
                         <div className="input-box animation" style={{ '--time': 1, '--reverse-time': 22 }}>
-                            <input type="email" required />
+                            <input type="email" value={email} onChange={handleEmailChange} required />
                             <label>EMAIL</label>
                             <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
                         <div className="input-box animation" style={{ '--time': 2, '--reverse-time': 23 }}>
-                            <input type="password" required />
+                            <input type="password" value={password} onChange={handlePasswordChange} required />
                             <label>PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
                         </div>
-                        <Button className="btn animation" style={{ '--time': 3, '--reverse-time': 24, marginTop: '20px' }}>
+                        <Button className="btn animation" style={{ '--time': 3, '--reverse-time': 24, marginTop: '20px' }} type="submit">
                             LOGIN
                         </Button>
                         <div className="logreg-link animation" style={{ '--time': 4, '--reverse-time': 25 }}>
@@ -47,6 +106,7 @@ const LoginSignin = () => {
                             </p>
                         </div>
                     </form>
+                    {error && <p className="error-message">{error}</p>}
                 </div>
 
                 {/* Info Text for Login */}
@@ -58,27 +118,25 @@ const LoginSignin = () => {
                 {/* Register Form */}
                 <div className={`form-box register ${!isRegister ? 'hidden' : ''}`}>
                     <h2 className="animation" style={{ '--time': 17, '--reverse-time': 0 }}>SIGN UP</h2>
-                    <form>
+                    <form onSubmit={sendRegisterData}>
                         <div className="input-box animation" style={{ '--time': 18, '--reverse-time': 1 }}>
-                            <input type="email" required />
+                            <input type="email" value={email} onChange={handleEmailChange} required />
                             <label>EMAIL</label>
                             <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
                         <div className="input-box animation" style={{ '--time': 19, '--reverse-time': 2 }}>
-                            <input type="password" required />
+                            <input type="password" value={password} onChange={handlePasswordChange} required />
                             <label>PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
                         </div>
                         <div className="input-box animation" style={{ '--time': 20, '--reverse-time': 3 }}>
-                            <input type="password" required />
+                            <input type="confirm-password" value={confirmPassword} onChange={handleConfirmPasswordChange} required />
                             <label>CONFIRM PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
                         </div>
-                        <Link to="/account">
-                            <Button className="btn animation" style={{ '--time': 21, '--reverse-time': 4, marginTop: '20px' }}>
-                                SIGN UP
-                            </Button>
-                        </Link>
+                        <Button className="btn animation" style={{ '--time': 21, '--reverse-time': 4, marginTop: '20px' }} type="submit">
+                            SIGN UP
+                        </Button>
                         <div className="logreg-link animation" style={{ '--time': 22, '--reverse-time': 5 }}>
                             <p>
                                 ALREADY HAVE AN ACCOUNT?{' '}
@@ -86,6 +144,7 @@ const LoginSignin = () => {
                             </p>
                         </div>
                     </form>
+                    {error && <p className="error-message">{error}</p>}
                 </div>
 
                 {/* Info Text for Register */}

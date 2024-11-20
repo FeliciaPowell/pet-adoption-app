@@ -1,178 +1,152 @@
-// AccountCreation Component
-// - A step-based user account creation form with progress tracking and completion modal.
-// - Steps include:
-//   1. User Choice (Adopt/Create Shelter)
-//   2. Personal Info Collection
-//   3. Additional Information (Checkboxes)
-// - Integrated with React Router for step navigation via query parameters.
-
-// Importing necessary dependencies and components
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../style.css";
 import Layout from "../components/Layout.jsx";
 import Button from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw, faUser, faAddressBook, faCakeCandles } from "@fortawesome/free-solid-svg-icons";
 
-// Main AccountCreation Component
 const AccountCreation = () => {
-  // Router hooks for managing navigation and URL query parameters
-  const location = useLocation();
-  const navigate = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [currentStep, setCurrentStep] = useState(1);
+    const [userEmail, setUserEmail] = useState(""); // User email from registration
+    const [userInfo, setUserInfo] = useState({ firstName: "", lastName: "", address: "", birthday: "" });
+    const [additionalInfo, setAdditionalInfo] = useState({ kids: false, cats: false, dogs: false, otherPets: false });
+    const [isModalActive, setIsModalActive] = useState(false);
+    const [error, setError] = useState(""); // Error message for account setup
 
-  // States for tracking the current step, user status, and modal visibility
-  const [currentStep, setCurrentStep] = useState(1);
-  const [userStatus, setUserStatus] = useState(null);
-  const [isModalActive, setIsModalActive] = useState(false);
+    useEffect(() => {
+        const fetchUserEmail = async () => {
+            try {
+                const token = localStorage.getItem("token"); // Fetch token from localStorage
+                if (!token) throw new Error("No token found");
 
-  // Sync step state with URL query parameter on load or change
-  useEffect(() => {
-    const stepFromUrl = new URLSearchParams(location.search).get("step");
-    if (stepFromUrl) {
-      setCurrentStep(parseInt(stepFromUrl, 10));
-    } else {
-      navigate("?step=1", { replace: true }); // Default to step 1 if no query param exists
-    }
-  }, [location.search, navigate]);
+                const response = await axios.get(`http://localhost:3000/current-user`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-  // Handlers for user choices
-  const handleChoice1 = () => {
-    setUserStatus("Want to Adopt"); // Save user choice
-    setCurrentStep(2); // Move to step 2
-    navigate(`?step=2`); // Update URL
-  };
+                console.log("Fetched user email:", response.data.email);
+                setUserEmail(response.data.email);
+            } catch (error) {
+                console.error("Failed to load user email:", error);
+                setError("Failed to verify user. Redirecting to login...");
+                setTimeout(() => navigate("/login"), 2000); // Redirect to login after 2 seconds
+            }
+        };
 
-  const handleChoice2 = () => {
-    setUserStatus("Create a Shelter");
-    setCurrentStep(2);
-    navigate(`?step=2`);
-  };
+        fetchUserEmail();
 
-  // Handlers for navigation buttons
-  const handleNext = () => {
-    if (currentStep < 3) {
-      const nextStep = currentStep + 1;
-      setCurrentStep(nextStep);
-      navigate(`?step=${nextStep}`);
-    } else {
-      setIsModalActive(true); // Show modal on "Complete"
-    }
-  };
+        const stepFromUrl = new URLSearchParams(location.search).get("step");
+        setCurrentStep(stepFromUrl ? parseInt(stepFromUrl, 10) : 1);
+    }, [location.search, navigate]);
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      const prevStep = currentStep - 1;
-      setCurrentStep(prevStep);
-      navigate(`?step=${prevStep}`);
-    }
-  };
+    const handleNext = () => {
+        if (currentStep < 3) {
+            navigate(`?step=${currentStep + 1}`);
+        } else {
+            axios.post(`http://localhost:3000/save-account`, { userInfo, additionalInfo, email: userEmail })
+                .then((response) => {
+                    console.log("Account saved successfully:", response.data);
+                    setIsModalActive(true);
+                })
+                .catch((error) => {
+                    console.error("Failed to save account:", error);
+                    setError("Account setup failed. Please try again.");
+                });
+        }
+    };
 
-  // Close the modal and reset state
-  const closeModal = () => {
-    setIsModalActive(false);
-    navigate("/"); // Redirect to home after completion
-  };
+    const handleBack = () => {
+        if (currentStep > 1) navigate(`?step=${currentStep - 1}`);
+    };
 
-  return (
-    <Layout footerType="default">
-      <div className="account-wrapper">
-        {/* Progress Bar Header */}
-        <div className="create-account-header">
-          <ul>
-            {/* Highlight the active step in the progress bar */}
-            <li className={`form-1-progressbar ${currentStep >= 1 ? "active" : ""}`}>
-              <div><p>1</p></div>
-            </li>
-            <li className={`form-2-progressbar ${currentStep >= 2 ? "active" : ""}`}>
-              <div><p>2</p></div>
-            </li>
-            <li className={`form-3-progressbar ${currentStep >= 3 ? "active" : ""}`}>
-              <div><p>3</p></div>
-            </li>
-          </ul>
-        </div>
+    const closeModal = () => {
+        setIsModalActive(false);
+        navigate("/"); // Navigate to homepage
+    };
 
-        {/* Completion Modal */}
-        {isModalActive && (
-          <div className="modal-wrapper active">
-            <div className="shadow" onClick={closeModal}></div>
-            <div className="success-wrap">
-              <span className="modal-icon">
-                <FontAwesomeIcon icon={faPaw} />
-              </span>
-              <p>YOU HAVE SUCCESSFULLY COMPLETED THE REGISTRATION PROCESS!</p>
-            </div>
-          </div>
-        )}
-
-        {/* Step Content */}
-        <div className="form-wrap">
-          {/* Step 1: User Choice */}
-          {currentStep === 1 && (
-            <div className="form-box">
-              <h2>DO YOU</h2>
-              <Button onClick={handleChoice1} className="btn-choice">WANT TO ADOPT</Button>
-              <h3>OR</h3>
-              <Button onClick={handleChoice2} className="btn-choice">CREATE A SHELTER</Button>
-            </div>
-          )}
-
-          {/* Step 2: Personal Info Form */}
-          {currentStep === 2 && (
-            <div className="form-box">
-              <h2 className="heading-margin">PERSONAL INFO</h2>
-              <form>
-                {/* Input Fields for User Details */}
-                <div className="input-box"><input type="text" required /><label>FIRST NAME</label><i><FontAwesomeIcon icon={faUser} /></i></div>
-                <div className="input-box"><input type="text" required /><label>LAST NAME</label><i><FontAwesomeIcon icon={faUser} /></i></div>
-                <div className="input-box"><input type="text" required /><label>ADDRESS</label><i><FontAwesomeIcon icon={faAddressBook} /></i></div>
-                <div className="input-box">
-                  <input
-                    type="text"
-                    placeholder=""
-                    onFocus={(e) => {
-                      e.target.type = "date"; // Show date picker on focus
-                      e.target.placeholder = "mm/dd/yyyy";
-                    }}
-                    onBlur={(e) => {
-                      e.target.type = e.target.value ? "date" : "text";
-                      e.target.placeholder = "";
-                    }}
-                    required
-                  />
-                  <label>BIRTHDAY</label><i><FontAwesomeIcon icon={faCakeCandles} /></i>
+    return (
+        <Layout footerType="default">
+            <div className="account-wrapper">
+                <div className="create-account-header">
+                    <ul>
+                        <li className={`form-1-progressbar ${currentStep >= 1 ? "active" : ""}`}><p>1</p></li>
+                        <li className={`form-2-progressbar ${currentStep >= 2 ? "active" : ""}`}><p>2</p></li>
+                        <li className={`form-3-progressbar ${currentStep >= 3 ? "active" : ""}`}><p>3</p></li>
+                    </ul>
                 </div>
-              </form>
-            </div>
-          )}
 
-          {/* Step 3: Checkbox Group */}
-          {currentStep === 3 && (
-            <div className="form-box">
-              <h2>DO YOU HAVE...?</h2>
-              <form className="checkbox-group">
-                <label><input type="checkbox" /> DO YOU HAVE KIDS?</label>
-                <label><input type="checkbox" /> DO YOU HAVE CATS?</label>
-                <label><input type="checkbox" /> DO YOU HAVE DOGS?</label>
-                <label><input type="checkbox" /> DO YOU HAVE OTHER PETS?</label>
-              </form>
-            </div>
-          )}
-        </div>
+                {isModalActive && (
+                    <div className="modal-wrapper active">
+                        <div className="shadow" onClick={closeModal}></div>
+                        <div className="success-wrap">
+                            <span className="modal-icon"><FontAwesomeIcon icon={faPaw} /></span>
+                            <p>Account setup complete!</p>
+                        </div>
+                    </div>
+                )}
 
-        {/* Navigation Buttons */}
-        <div className="btns-wrap">
-          {currentStep > 1 && <Button onClick={handleBack} className="btn-back">BACK</Button>}
-          {currentStep < 3 ? (
-            <Button onClick={handleNext} className="btn-next">NEXT</Button>
-          ) : (
-            <Button onClick={handleNext} className="btn-complete">COMPLETE</Button>
-          )}
-        </div>
-      </div>
-    </Layout>
-  );
+                {error && <p className="error-message">{error}</p>}
+
+                <div className="form-wrap">
+                    {currentStep === 1 && (
+                        <div className="form-box">
+                            <h2>Welcome, {userEmail}</h2>
+                            <p>Do you want to adopt or create a shelter?</p>
+                            <Button onClick={() => setCurrentStep(2)}>Adopt</Button>
+                            <Button onClick={() => setCurrentStep(2)}>Create Shelter</Button>
+                        </div>
+                    )}
+                    {currentStep === 2 && (
+                        <div className="form-box">
+                            <h2>Personal Info</h2>
+                            <form>
+                                <div className="input-box">
+                                    <input type="text" value={userInfo.firstName} onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })} required />
+                                    <label>First Name</label>
+                                </div>
+                                <div className="input-box">
+                                    <input type="text" value={userInfo.lastName} onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })} required />
+                                    <label>Last Name</label>
+                                </div>
+                                <div className="input-box">
+                                    <input type="text" value={userInfo.address} onChange={(e) => setUserInfo({ ...userInfo, address: e.target.value })} required />
+                                    <label>Address</label>
+                                </div>
+                                <div className="input-box">
+                                    <input
+                                        type="date"
+                                        value={userInfo.birthday}
+                                        onChange={(e) => setUserInfo({ ...userInfo, birthday: e.target.value })}
+                                        required
+                                    />
+                                    <label>Birthday</label>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+                    {currentStep === 3 && (
+                        <div className="form-box">
+                            <h2>Additional Information</h2>
+                            <form>
+                                <label><input type="checkbox" checked={additionalInfo.kids} onChange={(e) => setAdditionalInfo({ ...additionalInfo, kids: e.target.checked })} /> Kids?</label>
+                                <label><input type="checkbox" checked={additionalInfo.cats} onChange={(e) => setAdditionalInfo({ ...additionalInfo, cats: e.target.checked })} /> Cats?</label>
+                                <label><input type="checkbox" checked={additionalInfo.dogs} onChange={(e) => setAdditionalInfo({ ...additionalInfo, dogs: e.target.checked })} /> Dogs?</label>
+                                <label><input type="checkbox" checked={additionalInfo.otherPets} onChange={(e) => setAdditionalInfo({ ...additionalInfo, otherPets: e.target.checked })} /> Other pets?</label>
+                            </form>
+                        </div>
+                    )}
+                </div>
+
+                <div className="btns-wrap">
+                    {currentStep > 1 && <Button onClick={handleBack}>Back</Button>}
+                    <Button onClick={handleNext}>{currentStep === 3 ? "Complete" : "Next"}</Button>
+                </div>
+            </div>
+        </Layout>
+    );
 };
 
 export default AccountCreation;
