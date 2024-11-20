@@ -10,7 +10,7 @@ const Header = () => {
             <img src={logo} alt="Purrrfect Match Logo" style={styles.logo} />
           </Link>
         </div>
-        <Link to="/account" style={styles.loginLink}>
+        <Link to="/login" style={styles.loginLink}>
           <button style={styles.loginButton}>LOGIN</button>
         </Link>
         <div style={styles.bottomStripe}></div>
