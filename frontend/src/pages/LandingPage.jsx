@@ -67,9 +67,9 @@ const styles = {
         textAlign: 'center',
     },
     joinButton: {
-        padding: '10px 20px',
-        fontSize: '18px',
-        fontWeight: 'bold',
+        padding: '1px 10px',
+        fontSize: '25px',
+        fontFamily: "'Modak', cursive",
         backgroundColor: 'black',
         color: 'white',
         border: 'none',
