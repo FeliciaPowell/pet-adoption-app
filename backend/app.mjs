@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
-app.use(cors({ origin: "http://127.0.0.1:5173" })); // or use '*' for all origins
+app.use(cors({ origin: "*" })); // or use '*' for all origins
 app.use(express.json());
 
 // Login Functions and Route ************************************
@@ -42,7 +42,7 @@ const authenticateToken = (req, res, next) => {
 // Verify Admin Role
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Access DeniedL Admin only" });
+    return res.status(403).json({ message: "Access Denied Admin only" });
   }
   next();
 };
@@ -59,6 +59,7 @@ app.get("/admin", authenticateToken, isAdmin, (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+  console.log(email)
   users
     .getUserByEmail(email)
     .then((user) => {
