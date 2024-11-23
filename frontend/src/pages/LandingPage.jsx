@@ -10,7 +10,7 @@ const LandingPage = () => (
         </div>
         <div style={styles.callToAction}>
             <p style={styles.callToActionText}>ARE YOU READY TO MEET YOUR PURRRFECT MATCH?</p>
-            <Link to="/account" >
+            <Link to="/login?mode=register" >
                 <button style={styles.joinButton}>JOIN NOW</button>
             </Link>
         </div>

@@ -7,6 +7,9 @@ Capstone Group Project: "dating" website for pet adoption
 - [Installation](#installation)
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
+- [Usage](#usage)
+  - [Backend Login](#backend-login)
+  - [Testing Token](#testing-token)
 
 ---
 
@@ -40,6 +43,7 @@ npm install
 ```
 PORT = 3000
 MONGODB_CONNECT_STRING = "mongodb+srv://<db_username>:<db_password>@cluster0.nbpvb.mongodb.net/"
+JWT_SECRET = "purrrfect"
 ```
 
 - Replace <db_username> with your username and <db_password> with your password.
@@ -76,3 +80,42 @@ VITE_API_URL=http://localhost:3000
 ```
 npm run dev
 ```
+
+## Usage
+
+### Backend Login
+
+1. Send an HTTP POST request to "localhost:3000/login" with the following JSON object:
+
+```
+{
+    "email": "<user_email>",
+    "password": "<user_password>"
+}
+```
+
+- Replace <user_email> with user's email and <user_password> with user's password.
+
+2. The route should respond with a long encoded string as a JWT Token:
+
+```
+{
+    "token": "<long_token_string>"
+}
+```
+
+### Testing Token
+
+Postman Instructions:
+
+1. Follow the instructions on [Backend Login](#backend-login) to get your token string.
+
+- Copy the token string without the quotation marks.
+
+2. In Postman, create a new GET Request to the URL: "localhost:3000/protected".
+
+- Click on the "Authorization" tab. From the Auth Types dropdown, select "Bearer Token".
+
+- Paste the token string from earlier into the Token field. Press Send.
+
+3. The route should respond with a message and information about the user's token.
