@@ -347,16 +347,22 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: center;
     list-style-type: none;
-    margin-bottom: 30px;
+    margin-bottom: -15px;
 }
 
 .create-account-header ul li {
-    margin: 0 15px;
+    margin: 0 20px;
     text-align: center;
 }
 
+/* Center and properly space the h2 (Personal Info) */
+.form-box .step-2-h2 {
+    margin-top: -95px;
+    margin-bottom: -35px;
+}
+
 .create-account-header ul li div {
-    margin-top: 15px;
+    margin-top: 10px;
     width: 50px;
     height: 50px;
     background: #ddd;
