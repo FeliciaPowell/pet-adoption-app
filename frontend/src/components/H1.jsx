@@ -7,6 +7,7 @@ const H1 = ({ children, style = {} }) => {
         margin: 0,
         padding: '10px 0',
         fontFamily: 'Hammersmith One',
+        marginTop: '150px',
 
         ...style,
     };

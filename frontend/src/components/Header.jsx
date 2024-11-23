@@ -50,9 +50,9 @@ const styles = {
   loginButton: {
     position: 'absolute',
     top: '10px',
-    right: '0px',
+    right: '5px',
     backgroundColor: 'black',
-    color: 'white',
+    color: '#E0E9EB',
     padding: '10px 20px',
     border: 'none',
     borderRadius: '50px',
