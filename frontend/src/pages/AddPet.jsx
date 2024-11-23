@@ -1,6 +1,5 @@
 import React from "react";
 import Layout from "../components/Layout";
-import PetForm from "../components/PetForm";
 
 const AddPet = () => {
     return (
