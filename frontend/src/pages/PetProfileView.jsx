@@ -4,9 +4,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layout.jsx";
 
-// PetProfileView to view specific pet profile details
-// after completing intake pet adoption form thru submitting, will see specific pet profile completed
-
 const PetProfileView = () => {
   const { _id } = useParams();
   const [petData, setPetData] = useState(null); // State to hold pet data
@@ -40,8 +37,28 @@ const PetProfileView = () => {
         <p>Breed: {petData.breed}</p>
         <p>Age: {petData.age} years</p>
         <p>Gender: {petData.gender}</p>
+        <p>Color: {petData.color}</p>
+        <p>Weight: {petData.weight} kg</p>
         <p>Description: {petData.description}</p>
-        {/* Display additional pet attributes as needed */}
+        <p>Medical History: {petData.medicalHistory}</p>
+        <p>Location: {petData.location}</p>
+        <p>Availability: {petData.availability}</p>
+        <p>Vaccination: {petData.vaccination}</p>
+        <p>Spayed/Neutered: {petData.spayedNeutered}</p>
+        <p>Good with Kids: {petData.kids}</p>
+        <p>Good with Cats: {petData.cats}</p>
+        <p>Good with Dogs: {petData.dogs}</p>
+        <p>Temperament: {petData.temperament}</p>
+        {petData.profileImage && (
+          <div>
+            <h3>Profile Image:</h3>
+            <img
+              src={petData.profileImage}
+              alt={`${petData.name}'s profile`}
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
+          </div>
+        )}
       </div>
     </Layout>
   );
