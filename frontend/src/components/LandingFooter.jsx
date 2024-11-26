@@ -53,7 +53,7 @@ const styles = {
     },
     infoButton: {
         backgroundColor: 'black',
-        color: 'white',
+        color: '#E0E9EB',
         width: '250px',
         height: '40px',
         padding: '10px 20px',

@@ -18,6 +18,7 @@ const Button = ({ children, className, style, onClick }) => {
                 fontWeight: '600',
                 backgroundColor: '#000000',
                 overflow: 'hidden',
+                fontFamily: 'Hammersmith One',
             }}
             onClick={onClick} // <-- Add the onClick prop here
             onMouseEnter={(e) => {

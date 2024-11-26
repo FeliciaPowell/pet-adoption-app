@@ -47,7 +47,7 @@ const NavBar = () => {
                 {/* Adopt link */}
                 <li style={styles.navItem}>
                     <Link
-                        to="/adoption"
+                        to="/pets"
                         style={{
                             ...styles.navLink,
                             ...(hoveredLink === 'ADOPT' ? styles.navLinkHover : {})
@@ -59,48 +59,18 @@ const NavBar = () => {
                     </Link>
                 </li>
                 {/* FAQ link with dropdown menu */}
-                <li
-                    style={styles.navItem}
-                    onMouseEnter={() => handleMouseEnter('FAQ')}
-                    onMouseLeave={() => handleMouseLeave('FAQ')}
-                >
+                <li style={styles.navItem}>
                     <Link
-                        to="#"
+                        to="/more_info_adopters"
                         style={{
                             ...styles.navLink,
                             ...(hoveredLink === 'FAQ' ? styles.navLinkHover : {})
                         }}
-                    >
+                        onMouseEnter={() => handleMouseEnter('FAQ')}
+                        onMouseLeave={() => handleMouseLeave('FAQ')}
+                        >
                         FAQ
                     </Link>
-                    {dropdownVisible && (
-                        <div style={styles.dropdown}>
-                            {/* Dropdown link for adopters */}
-                            <Link
-                                to="/more_info_adopters"
-                                style={{
-                                    ...styles.dropdownLink,
-                                    ...(hoveredLink === 'INFO_ADOPTERS' ? styles.dropdownLinkHover : {})
-                                }}
-                                onMouseEnter={() => setHoveredLink('INFO_ADOPTERS')}
-                                onMouseLeave={() => setHoveredLink(null)}
-                            >
-                                MORE INFO FOR ADOPTERS
-                            </Link>
-                            {/* Dropdown link for shelters */}
-                            <Link
-                                to="/more_info_shelters"
-                                style={{
-                                    ...styles.dropdownLink,
-                                    ...(hoveredLink === 'INFO_SHELTERS' ? styles.dropdownLinkHover : {})
-                                }}
-                                onMouseEnter={() => setHoveredLink('INFO_SHELTERS')}
-                                onMouseLeave={() => setHoveredLink(null)}
-                            >
-                                MORE INFO FOR SHELTERS
-                            </Link>
-                        </div>
-                    )}
                 </li>
                 {/* About Us link */}
                 <li style={styles.navItem}>

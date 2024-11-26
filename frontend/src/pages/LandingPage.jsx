@@ -3,7 +3,7 @@ import LandingPageDog from "../assets/landingPageDog.png"
 import LandingPageCat from "../assets/landingPageCat.png"
 import {Link} from "react-router-dom";
 const LandingPage = () => (
-    <Layout footerType="landing">
+    <Layout footerType="default">
         <div style={styles.imageContainer}>
             <img src={LandingPageDog} alt="A Golden Retriever" style = {styles.dogImage} />
             <img src={LandingPageCat} alt="A Striped Cat" style = {styles.catImage} />
