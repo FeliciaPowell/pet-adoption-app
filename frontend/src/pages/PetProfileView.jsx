@@ -3,6 +3,7 @@ import "../index.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layout.jsx";
+import Button from "../components/Button.jsx";
 
 const PetProfileView = () => {
   const { _id } = useParams();
@@ -26,6 +27,11 @@ const PetProfileView = () => {
     fetchPetData();
   }, [_id]);
 
+  // Function to handle email button click
+  const handleEmailClick = () => {
+    window.location.href = "mailto:adopt@purrfecmatch.com";
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -33,6 +39,15 @@ const PetProfileView = () => {
     <Layout footerType="default">
       <div className="pet-profile">
         <h1>{petData.name}</h1>
+        {petData.profileImage && (
+          <div>
+            <img
+              src={petData.profileImage}
+              alt={`${petData.name}'s profile`}
+              style={{ maxWidth: "20%", maxHeight: "20%" }}
+            />
+          </div>
+        )}
         <p>Type: {petData.type}</p>
         <p>Breed: {petData.breed}</p>
         <p>Age: {petData.age} years</p>
@@ -49,16 +64,9 @@ const PetProfileView = () => {
         <p>Good with Cats: {petData.cats}</p>
         <p>Good with Dogs: {petData.dogs}</p>
         <p>Temperament: {petData.temperament}</p>
-        {petData.profileImage && (
-          <div>
-            <h3>Profile Image:</h3>
-            <img
-              src={petData.profileImage}
-              alt={`${petData.name}'s profile`}
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
-          </div>
-        )}
+        <Button style={{ maxWidth: "20%" }} onClick={handleEmailClick}>
+          Contact Us to Adopt
+        </Button>
       </div>
     </Layout>
   );
