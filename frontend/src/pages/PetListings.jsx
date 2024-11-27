@@ -11,6 +11,10 @@ const PetListings = () => {
   const [error, setError] = useState(null);
   const [isSortOpen, setIsSortOpen] = useState(false); // State to toggle the dropdown
   const [hoveredItem, setHoveredItem] = useState(null); // State for hover tracking
+  const [cats, setCats] = useState(false);
+  const [dogs, setDogs] = useState(false);
+  const [kids, setKids] = useState(false);
+  const [spayNeuter, setSpayNeuter] = useState(false);
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -45,56 +49,116 @@ const PetListings = () => {
   if (error) return <p>{error}</p>;
 
   return (
-      <Layout footerType="default">
-        <h1 style={styles.heading}>Adoption Listings</h1>
-        <div style={styles.buttonContainer}>
-          {/* Sort Dropdown */}
-          <div style={styles.dropdown}>
-            <button
-                style={styles.button}
-                onClick={() => {
-                  setIsSortOpen((prev) => !prev)
-                }}
-            >
-              SORT <span style={styles.icon}>☰</span>
-            </button>
-            {isSortOpen && (
-                <div style={styles.dropdownMenu}>
-                  <button
-                      style={{
-                        ...styles.dropdownItem,
-                        ...(hoveredItem === "name" ? styles.dropdownItemHover : {}),
-                      }}
-                      onMouseEnter={() => setHoveredItem("name")}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={handleSortByName}
-                  >
-                    SORT BY NAME
-                  </button>
-                  <button
-                      style={{
-                        ...styles.dropdownItem,
-                        ...(hoveredItem === "age" ? styles.dropdownItemHover : {}),
-                      }}
-                      onMouseEnter={() => setHoveredItem("age")}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={handleSortByAge}
-                  >
-                    SORT BY AGE
-                  </button>
-                </div>
-            )}
-          </div>
-          <button style={styles.button} onClick={handleFilter}>
-            FILTER <FontAwesomeIcon icon={faFilter} style={styles.filterIcon} />
+    <Layout footerType="default">
+      <h1 style={styles.heading}>Adoption Listings</h1>
+      <div style={styles.buttonContainer}>
+        {/* Sort Dropdown */}
+        <div style={styles.dropdown}>
+          <button
+            style={styles.button}
+            onClick={() => {
+              setIsSortOpen((prev) => !prev);
+            }}
+          >
+            SORT <span style={styles.icon}>☰</span>
           </button>
+          {isSortOpen && (
+            <div style={styles.dropdownMenu}>
+              <button
+                style={{
+                  ...styles.dropdownItem,
+                  ...(hoveredItem === "name" ? styles.dropdownItemHover : {}),
+                }}
+                onMouseEnter={() => setHoveredItem("name")}
+                onMouseLeave={() => setHoveredItem(null)}
+                onClick={handleSortByName}
+              >
+                SORT BY NAME
+              </button>
+              <button
+                style={{
+                  ...styles.dropdownItem,
+                  ...(hoveredItem === "age" ? styles.dropdownItemHover : {}),
+                }}
+                onMouseEnter={() => setHoveredItem("age")}
+                onMouseLeave={() => setHoveredItem(null)}
+                onClick={handleSortByAge}
+              >
+                SORT BY AGE
+              </button>
+            </div>
+          )}
         </div>
-        <div style={styles.petListings}>
-          {pets.map((pet) => (
-              <PetCard key={pet._id} pet={pet} />
-          ))}
-        </div>
-      </Layout>
+        <button style={styles.button} onClick={handleFilter}>
+          FILTER <FontAwesomeIcon icon={faFilter} style={styles.filterIcon} />
+        </button>
+      </div>
+      <div style={styles.filterContainer}>
+        <label>
+          <input
+            type="checkbox"
+            checked={cats}
+            onChange={() => {
+              if (cats) {
+                setCats(false);
+              } else {
+                setCats(true);
+              }
+            }}
+          />
+          Cats
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={dogs}
+            onChange={() => {
+              if (dogs) {
+                setDogs(false);
+              } else {
+                setDogs(true);
+              }
+            }}
+          />
+          Dogs
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={kids}
+            onChange={() => {
+              console.log(kids);
+              if (kids) {
+                setKids(false);
+              } else {
+                setKids(true);
+              }
+              console.log(kids);
+            }}
+          />
+          Good with Kids
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={spayNeuter}
+            onChange={() => {
+              if (spayNeuter) {
+                setSpayNeuter(false);
+              } else {
+                setSpayNeuter(true);
+              }
+            }}
+          />
+          Spayed/Neutered
+        </label>
+      </div>
+      <div style={styles.petListings}>
+        {pets.map((pet) => (
+          <PetCard key={pet._id} pet={pet} />
+        ))}
+      </div>
+    </Layout>
   );
 };
 
@@ -108,7 +172,7 @@ const styles = {
     margin: "0 auto",
     padding: "20px",
     maxWidth: "1200px", // Restrict the width of the grid
-    marginBottom: '100px'
+    marginBottom: "100px",
   },
   heading: {
     textAlign: "center",
@@ -120,13 +184,13 @@ const styles = {
     justifyContent: "space-between",
     padding: "0 40px",
     marginBottom: "10px",
-    marginTop: '155px'
+    marginTop: "155px",
   },
   button: {
     backgroundColor: "#000000",
     color: "#E0E9EB",
     border: "none",
-    borderRadius: '50px',
+    borderRadius: "50px",
     padding: "10px 20px",
     fontSize: "1rem",
     fontWeight: "bold",
@@ -173,6 +237,12 @@ const styles = {
   dropdown: {
     position: "relative",
     display: "inline-block", // Ensure proper inline display
+  },
+  filterContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    margin: "20px 0",
   },
 };
 
