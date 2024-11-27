@@ -46,6 +46,7 @@ const styles = {
   image: {
     width: "100%",
     height: "auto",
+    display: "block",
   },
   name: {
     fontFamily: "'Modak', sans-serif", // Use the "Modak" font for headings
