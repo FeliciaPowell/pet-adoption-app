@@ -100,11 +100,16 @@ app.post("/login", async (req, res) => {
     }
 
     // Include role in the token payload
-    const token = createToken({ userId: user[0]._id, role: user[0].role || "pending" }); // Default "pending" role if not assigned yet
+    const token = createToken({
+      userId: user[0]._id,
+      role: user[0].role || "pending",
+    }); // Default "pending" role if not assigned yet
     res.json({ token });
   } catch (error) {
     console.error("Error during login:", error.message);
-    res.status(500).json({ error: "Internal server error. Please try again later." });
+    res
+      .status(500)
+      .json({ error: "Internal server error. Please try again later." });
   }
 });
 
@@ -116,7 +121,9 @@ app.post("/user", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required." });
+      return res
+        .status(400)
+        .json({ error: "Email and password are required." });
     }
 
     const hashedPassword = await hash.createHash(password);
@@ -129,7 +136,9 @@ app.post("/user", async (req, res) => {
       status: "pending", // Indicates account is incomplete
     });
 
-    res.status(201).json({ message: "User registered successfully.", user: newUser });
+    res
+      .status(201)
+      .json({ message: "User registered successfully.", user: newUser });
   } catch (error) {
     console.error("Error creating user:", error.message);
 
@@ -162,66 +171,90 @@ app.put("/user/update-role", authenticateToken, async (req, res) => {
   const { email, role } = req.body;
 
   if (!email || !role || !["user", "admin"].includes(role)) {
-      return res.status(400).json({ error: "Valid email and role are required." });
+    return res
+      .status(400)
+      .json({ error: "Valid email and role are required." });
   }
 
   console.log("Incoming request to update role:", { email, role });
 
   try {
-      const updatedUser = await users.updateUserByEmail(email, { role });
+    const updatedUser = await users.updateUserByEmail(email, { role });
 
-      if (!updatedUser) {
-          console.error("User not found for email:", email);
-          return res.status(404).json({ error: "User not found." });
-      }
+    if (!updatedUser) {
+      console.error("User not found for email:", email);
+      return res.status(404).json({ error: "User not found." });
+    }
 
-      console.log("User role updated successfully:", updatedUser);
-      res.status(200).json({ message: "Role updated successfully.", user: updatedUser });
+    console.log("User role updated successfully:", updatedUser);
+    res
+      .status(200)
+      .json({ message: "Role updated successfully.", user: updatedUser });
   } catch (error) {
-      console.error("Error updating role:", error.message);
-      res.status(500).json({ error: "Failed to update role. Please try again." });
+    console.error("Error updating role:", error.message);
+    res.status(500).json({ error: "Failed to update role. Please try again." });
   }
 });
 
-
 // Account Completion Route
 app.put("/user/account-setup", authenticateToken, async (req, res) => {
-  const { email, role, firstName, lastName, address, birthday, additionalInfo } = req.body;
+  const {
+    email,
+    role,
+    firstName,
+    lastName,
+    address,
+    birthday,
+    additionalInfo,
+  } = req.body;
 
   if (!email || !role || !["user", "admin"].includes(role)) {
-      return res.status(400).json({ error: "Email and valid role are required." });
+    return res
+      .status(400)
+      .json({ error: "Email and valid role are required." });
   }
 
-  const updates = { email, role, address, birthday, additionalInfo, status: "complete" };
+  const updates = {
+    email,
+    role,
+    address,
+    birthday,
+    additionalInfo,
+    status: "complete",
+  };
 
   if (role === "user") {
-      if (!firstName || !lastName) {
-          return res.status(400).json({ error: "First and last name are required for users." });
-      }
-      updates.firstName = firstName;
-      updates.lastName = lastName;
+    if (!firstName || !lastName) {
+      return res
+        .status(400)
+        .json({ error: "First and last name are required for users." });
+    }
+    updates.firstName = firstName;
+    updates.lastName = lastName;
   } else if (role === "admin") {
-      if (!firstName) {
-          return res.status(400).json({ error: "Name is required for admins." });
-      }
-      updates.name = firstName;
+    if (!firstName) {
+      return res.status(400).json({ error: "Name is required for admins." });
+    }
+    updates.name = firstName;
   }
 
   console.log("Incoming account setup data:", updates);
 
   try {
-      const updatedUser = await users.updateUserByEmail(email, updates);
+    const updatedUser = await users.updateUserByEmail(email, updates);
 
-      if (!updatedUser) {
-          console.error("User not found for email:", email);
-          return res.status(404).json({ error: "User not found." });
-      }
+    if (!updatedUser) {
+      console.error("User not found for email:", email);
+      return res.status(404).json({ error: "User not found." });
+    }
 
-      console.log("Account setup complete:", updatedUser);
-      res.status(200).json({ message: "Account setup complete.", user: updatedUser });
+    console.log("Account setup complete:", updatedUser);
+    res
+      .status(200)
+      .json({ message: "Account setup complete.", user: updatedUser });
   } catch (error) {
-      console.error("Error during account setup:", error.message);
-      res.status(500).json({ error: "Internal server error." });
+    console.error("Error during account setup:", error.message);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
@@ -280,7 +313,6 @@ app.post("/pet", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((pet) => {
@@ -316,7 +348,6 @@ app.put("/pets/:_id", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((numUpdated) => {
