@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from "react-router-dom";
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+  const [login, setLogin] = useState(false);
+  const location = useLocation(); 
+
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      setLogin(true);
+    }
+    else {
+      setLogin(false);
+    }
+  }, [])
+
   return (
       <header style={styles.header}>
         <div style={styles.logoContainer}>
@@ -10,9 +23,18 @@ const Header = () => {
             <img src={logo} alt="Purrrfect Match Logo" style={styles.logo} />
           </Link>
         </div>
-        <Link to="/login" style={styles.loginLink}>
+        {/* Logged in */}
+        {login &&  <Link to="/person" style={styles.loginLink}>
+          <button style={styles.loginButton}>ACCOUNT</button>
+        </Link>}
+        {/* Logged in on person page, to log out */}
+        {login && location.pathname == '/person' && <Link to="/" style={styles.loginLink}>
+          <button onClick={localStorage.setItem('user', '')} style={styles.loginButton}>LOGOUT</button>
+        </Link>}
+        {/* Not logged in */}
+        {!login &&  <Link to="/login" style={styles.loginLink}>
           <button style={styles.loginButton}>LOGIN</button>
-        </Link>
+        </Link>}
         <div style={styles.bottomStripe}></div>
       </header>
   );

@@ -16,60 +16,46 @@ const LoginSignin = () => {
     const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
     const [error, setError] = useState("");
 
-    // Event handlers for form inputs
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handlePasswordChange = (event) => setPassword(event.target.value);
     const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
 
-    // Function to handle login
-    const sendLoginData = async (e) => {
+    // Navigate to AccountCreation with required data
+    const goToAccountCreation = (e) => {
         e.preventDefault();
-        setError("");
-
-        try {
-            const userData = { email, password };
-            const response = await axios.post(`http://localhost:3000/login`, userData, {
-                headers: { "Content-Type": "application/json" },
-            });
-
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
-                // Navigate to account creation step if role is undefined
-                navigate("/account", { state: { email, role: response.data.role } });
-            } else {
-                setError("Login failed. Please check your credentials.");
-            }
-        } catch (error) {
-            setError("Failed to log in. Please check your credentials.");
-            console.error("Login error:", error);
-        }
-    };
-
-    // Function to handle registration
-    const sendRegisterData = async (e) => {
-        e.preventDefault();
-        setError("");
 
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
             return;
         }
 
+        console.log("Navigating with state:", { email, password, confirmPassword });
+
+        navigate("/account", { state: { email, password, confirmPassword } });
+    };
+
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        setError(""); // Reset error message
+
         try {
-            const userData = { email, password };
-            const response = await axios.post(`http://localhost:3000/user`, userData, {
-                headers: { "Content-Type": "application/json" },
+            console.log("Logging in with:", { email, password });
+
+            const response = await axios.post("http://localhost:3000/login", {
+                email,
+                password,
             });
 
-            if (response.status === 201) {
-                // Redirect to account creation step with email and password in state
-                navigate("/account", { state: { email } });
+            if (response.status === 200) {
+                console.log("Login successful:", response.data.user);
+                localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
+                navigate("/pets"); // Redirect to /pets upon successful login
             } else {
-                setError("Registration failed. Please try again.");
+                setError("Login failed. Please check your email and password.");
             }
-        } catch (error) {
-            setError("Failed to register user.");
-            console.error("Registration error:", error);
+        } catch (err) {
+            console.error("Login error:", err.response?.data || err.message);
+            setError("Login failed. Please try again.");
         }
     };
 
@@ -85,10 +71,26 @@ const LoginSignin = () => {
                 <span className="bg-animate"></span>
                 <span className="bg-animate2"></span>
 
+                {/* Info Text for Login */}
+                <div className={`info-text login ${isRegister ? "hidden" : ""}`}>
+                    <h2 className="animation" style={{ "--time": 0, "--reverse-time": 20 }}>WELCOME BACK!</h2>
+                    <p className="animation" style={{ "--time": 1, "--reverse-time": 21 }}>
+                        READY TO MEET YOUR NEXT FURRY FRIEND?
+                    </p>
+                </div>
+
+                {/* Info Text for Register */}
+                <div className={`info-text register ${!isRegister ? "hidden" : ""}`}>
+                    <h2 className="animation" style={{ "--time": 17, "--reverse-time": 0 }}>HELLO!</h2>
+                    <p className="animation" style={{ "--time": 18, "--reverse-time": 1 }}>
+                        JOIN US AND START FINDING YOUR PURRRFECT PET!
+                    </p>
+                </div>
+
                 {/* Login Form */}
                 <div className={`form-box login ${isRegister ? "hidden" : ""}`}>
                     <h2 className="animation" style={{ "--time": 0, "--reverse-time": 21 }}>LOGIN</h2>
-                    <form onSubmit={sendLoginData}>
+                    <form onSubmit={handleLoginSubmit}>
                         <div className="input-box animation" style={{ "--time": 1, "--reverse-time": 22 }}>
                             <input 
                                 type="email" 
@@ -115,6 +117,7 @@ const LoginSignin = () => {
                             className="btn animation"
                             style={{ "--time": 3, "--reverse-time": 24, marginTop: "20px" }}
                             type="submit"
+                            disabled={!email || !password} // Disable button if inputs are empty
                         >
                             LOGIN
                         </Button>
@@ -125,21 +128,12 @@ const LoginSignin = () => {
                             </p>
                         </div>
                     </form>
-                    {error && <p className="error-message">{error}</p>}
-                </div>
-
-                {/* Info Text for Login */}
-                <div className={`info-text login ${isRegister ? "hidden" : ""}`}>
-                    <h2 className="animation" style={{ "--time": 0, "--reverse-time": 20 }}>WELCOME BACK!</h2>
-                    <p className="animation" style={{ "--time": 1, "--reverse-time": 21 }}>
-                        READY TO MEET YOUR NEXT FURRY FRIEND?
-                    </p>
                 </div>
 
                 {/* Register Form */}
                 <div className={`form-box register ${!isRegister ? "hidden" : ""}`}>
                     <h2 className="animation" style={{ "--time": 17, "--reverse-time": 0 }}>SIGN UP</h2>
-                    <form onSubmit={sendRegisterData}>
+                    <form onSubmit={goToAccountCreation}>
                         <div className="input-box animation" style={{ "--time": 18, "--reverse-time": 1 }}>
                             <input 
                                 type="email" 
@@ -187,15 +181,6 @@ const LoginSignin = () => {
                             </p>
                         </div>
                     </form>
-                    {error && <p className="error-message">{error}</p>}
-                </div>
-
-                {/* Info Text for Register */}
-                <div className={`info-text register ${!isRegister ? "hidden" : ""}`}>
-                    <h2 className="animation" style={{ "--time": 17, "--reverse-time": 0 }}>HELLO!</h2>
-                    <p className="animation" style={{ "--time": 18, "--reverse-time": 1 }}>
-                        JOIN US AND START FINDING YOUR PURRRFECT PET!
-                    </p>
                 </div>
             </div>
         </Layout>
