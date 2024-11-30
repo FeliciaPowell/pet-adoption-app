@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 
 const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState(null);
+  const [userInfo, setUserInfo] = useState({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+        address: "",
+        birthday: "",
+        kids: false,
+        cats: false,
+        dogs: false,
+        otherPets: false,
+  });
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -14,6 +27,13 @@ const ProfilePage = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUserInfo(JSON.parse(storedUser))
+    }
+  }, [])
 
   return (
     <Layout footerType="profile">
@@ -37,23 +57,23 @@ const ProfilePage = () => {
           </div>
           {/* Profile Info */}
           <div style={styles.profileInfo}>
-            <h2 style={styles.username}>John Doe</h2>
+            <h2 style={styles.username}>{userInfo.firstName} {userInfo.lastName}</h2>
             <div style={styles.infoGrid}>
               <div>
-                <p><strong>Username:</strong> johndoe123</p>
-                <p><strong>Address:</strong> 1234 Main St</p>
-                <p><strong>Birthday:</strong> 01/01/1990</p>
+                <p><strong>Email:</strong> {userInfo.email}</p>
+                <p><strong>Address:</strong> {userInfo.address}</p>
+                <p><strong>Birthday:</strong> {userInfo.birthday}</p>
               </div>
               <div>
-                <p><strong>Date Created:</strong> 01/01/2023</p>
-                <p><strong>Status:</strong> Wants to Adopt</p>
-                <p><strong>Do You Have Kids?</strong> Yes</p>
+                <p><strong>Do You Have Cats?</strong> {userInfo.cats ? "Yes" : "No"}</p>
+                <p><strong>Do You Have Dogs?</strong> {userInfo.dogs ? "Yes" : "No"}</p>
+                <p><strong>Do You Have Kids?</strong> {userInfo.kids ? "Yes" : "No"}</p>
               </div>
             </div>
           </div>
         </div>
         {/* Favorites Section */}
-        <div style={styles.favorites}>
+        {/* <div style={styles.favorites}>
           <h3 style={styles.sectionTitle}>Favorites</h3>
           <div style={styles.favoritesList}>
             {[1, 2, 3, 4, 5, 6].map((item, index) => (
@@ -67,7 +87,7 @@ const ProfilePage = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

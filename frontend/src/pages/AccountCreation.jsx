@@ -82,16 +82,16 @@ const AccountCreation = () => {
         setError("");
         try {
             const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
-
-            const response = await axios.post("http://localhost:3000/user/account-setup", payload);
+            const response = await axios.post("http://localhost:3000/user/", payload);
 
             if (response.status === 201) {
                 setModalActive(true);
                 localStorage.clear(); // Clear saved credentials
+                localStorage.setItem('user', JSON.stringify(response.data)); // Set user for Header
                 setTimeout(() => {
                     setModalActive(false);
-                    navigate("/login"); // Redirect after showing modal
-                }, 3000);
+                    navigate("/pets"); // Redirect after showing modal
+                }, 2000);
             } else {
                 setError("Failed to create account. Please try again.");
             }
