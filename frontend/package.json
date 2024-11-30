@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://FeliciaPowell.github.io/pet-adoption-app/",
+  "homepage": "https://FeliciaPowell.github.io/pet-adoption-app/frontend",
   "scripts": {
     "predeploy" : "npm run build",
     "deploy" : "gh-pages -d dist",
