@@ -117,6 +117,7 @@ const LoginSignin = () => {
                             className="btn animation"
                             style={{ "--time": 3, "--reverse-time": 24, marginTop: "20px" }}
                             type="submit"
+                            disabled={!email || !password} // Disable button if inputs are empty
                         >
                             LOGIN
                         </Button>

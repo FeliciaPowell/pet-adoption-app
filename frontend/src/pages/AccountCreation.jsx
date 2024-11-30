@@ -46,6 +46,9 @@ const AccountCreation = () => {
                 password,
                 confirmPassword,
             }));
+            localStorage.setItem("email", email);
+            localStorage.setItem("password", password);
+            localStorage.setItem("confirmPassword", confirmPassword);
         }
     }, [location.state, navigate]);
 
@@ -58,25 +61,31 @@ const AccountCreation = () => {
     };
 
     // Next button handler
-    const handleNext = (e) => {
-        e.preventDefault();
+    // const handleNext = (e) => {
+    //     e.preventDefault();
+    //     setError("");
+    //     if (currentStep === 1) {
+    //         if (!userDetails.email || !userDetails.password || !userDetails.confirmPassword) {
+    //             setError("Please fill in all required fields.");
+    //             return;
+    //         }
+    //         if (userDetails.password !== userDetails.confirmPassword) {
+    //             setError("Passwords do not match!");
+    //             return;
+    //         }
+    //     }
+    //     if (currentStep === 2) {
+    //         if (!userDetails.firstName || !userDetails.lastName || !userDetails.address || !userDetails.birthday) {
+    //             setError("Please complete all fields in this step.");
+    //             return;
+    //         }
+    //     }
+    const handleNext = () => {
+        if (currentStep === 1 && (!userDetails.password || userDetails.password !== userDetails.confirmPassword)) {
+            setError("Passwords do not match!");
+            return;
+        }
         setError("");
-        if (currentStep === 1) {
-            if (!userDetails.email || !userDetails.password || !userDetails.confirmPassword) {
-                setError("Please fill in all required fields.");
-                return;
-            }
-            if (userDetails.password !== userDetails.confirmPassword) {
-                setError("Passwords do not match!");
-                return;
-            }
-        }
-        if (currentStep === 2) {
-            if (!userDetails.firstName || !userDetails.lastName || !userDetails.address || !userDetails.birthday) {
-                setError("Please complete all fields in this step.");
-                return;
-            }
-        }
         setCurrentStep((prev) => prev + 1);
     };
 
@@ -87,12 +96,11 @@ const AccountCreation = () => {
     };
 
     // Submit account creation
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         setLoading(true);
         setError("");
         try {
-            const { confirmPassword, ...payload } = userDetails;
+            const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
 
             const response = await axios.post("http://localhost:3000/user/account-setup", payload);
 
@@ -107,7 +115,7 @@ const AccountCreation = () => {
                 setError("Failed to create account. Please try again.");
             }
         } catch (err) {
-            setError("Failed to create account: " + (err.response?.data?.error || "Unexpected error occurred."));
+            setError("Failed to create account: " + (err.response?.data?.error || err.message));
         } finally {
             setLoading(false);
         }
@@ -124,6 +132,7 @@ const AccountCreation = () => {
                     </ul>
                 </div>
 
+                {/* Success Modal */}
                 {modalActive && (
                     <div className="modal-wrapper active">
                         <div className="modal-content">
@@ -135,6 +144,7 @@ const AccountCreation = () => {
 
                 {error && <p className="error-message">{error}</p>}
 
+                {/* Step 1: Account Details */}
                 {currentStep === 1 && (
                     <div className="form-box">
                         <h2>Account Details</h2>
@@ -174,7 +184,7 @@ const AccountCreation = () => {
                 )}
 
                 {currentStep === 2 && (
-                    <div className="form-box">
+                    <div className="form-box step-2">
                         <h2>Personal Info</h2>
                         <form>
                             <div className="input-box">
@@ -211,16 +221,16 @@ const AccountCreation = () => {
                                 <input
                                     type="text"
                                     placeholder=""
-                                    value={userInfo.birthday}
+                                    value={userDetails.birthday}
                                     onFocus={(e) => {
                                         e.target.type = "date";
                                         e.target.placeholder = "mm/dd/yyyy";
                                     }}
                                     onBlur={(e) => {
-                                        e.target.type = userInfo.birthday ? "date" : "text";
+                                        e.target.type = userDetails.birthday ? "date" : "text";
                                         e.target.placeholder = "";
                                     }}
-                                    onChange={(e) => setUserInfo({ ...userInfo, birthday: e.target.value })}
+                                    onChange={(e) => handleInputChange("birthday", e.target.value)}
                                     required
                                 />
                                 <label>Birthday</label>
@@ -230,6 +240,7 @@ const AccountCreation = () => {
                     </div>
                 )}
 
+                {/* Step 3: Preferences */}
                 {currentStep === 3 && (
                     <div className="form-box">
                         <h2>Preferences</h2>

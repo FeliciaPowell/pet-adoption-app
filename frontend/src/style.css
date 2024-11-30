@@ -525,3 +525,11 @@ h1, h2, h3, h4, h5, h6 {
 .modal-wrapper.active .success-wrap {
     transform: translateY(0);
 }
+
+/* Specific styling for Personal Info section */
+.form-box.step-2 {
+    margin-top: -50px;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, margin-top 0.3s ease;
+}
+
