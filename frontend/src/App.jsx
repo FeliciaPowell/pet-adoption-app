@@ -17,26 +17,24 @@ import PetListings from "./pages/PetListings.jsx"; // Pet listings of card displ
 
 function App() {
   return (
-    <>
-      <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/account" element={<AccountCreation />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/adoption" element={<AdoptionListings />} />
-            <Route path="/adoption_management" element={<AdoptionManagement />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/person" element={<PersonProfile />} />
-            <Route path="/add_pet" element={<AddPet/>} />
-            <Route path="/pets/:_id" element={<PetProfileView />} />
-            <Route path="/pets" element={<PetListings />} />
-            <Route path="/shelter_management" element={<ShelterManagement />} />
-            <Route path="/more_info_adopters" element={<MoreInfoAdopters />} />
-            <Route path="/more_info_shelters" element={<MoreInfoShelters />} />
-          </Routes>
-      </Router>
-    </>
+    <Router basename="/pet-adoption-app">
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/account" element={<AccountCreation />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/adoption" element={<AdoptionListings />} />
+        <Route path="/adoption_management" element={<AdoptionManagement />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/person" element={<PersonProfile />} />
+        <Route path="/add_pet" element={<AddPet />} />
+        <Route path="/pets/:_id" element={<PetProfileView />} />
+        <Route path="/pets" element={<PetListings />} />
+        <Route path="/shelter_management" element={<ShelterManagement />} />
+        <Route path="/more_info_adopters" element={<MoreInfoAdopters />} />
+        <Route path="/more_info_shelters" element={<MoreInfoShelters />} />
+      </Routes>
+    </Router>
   );
 }
 

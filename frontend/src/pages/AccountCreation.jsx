@@ -83,7 +83,7 @@ const AccountCreation = () => {
         try {
             const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
 
-            const response = await axios.post("http://localhost:3000/user/account-setup", payload);
+            const response = await axios.put("http://localhost:3000/user/account-setup", payload);
 
             if (response.status === 201) {
                 setModalActive(true);
