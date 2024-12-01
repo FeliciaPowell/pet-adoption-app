@@ -200,11 +200,6 @@ app.put("/user/account-setup", authenticateToken, async (req, res) => {
       }
       updates.firstName = firstName;
       updates.lastName = lastName;
-  } else if (role === "admin") {
-      if (!firstName) {
-          return res.status(400).json({ error: "Name is required for admins." });
-      }
-      updates.name = firstName;
   }
 
   console.log("Incoming account setup data:", updates);
