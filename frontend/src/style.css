@@ -16,7 +16,7 @@ body {
     min-height: 100vh;
     background: #6F94F1;
     font-family: 'Hammersmith One';
-
+    text-transform: uppercase;
 }
 
 /* Apply the heading font */
