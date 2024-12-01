@@ -17,7 +17,13 @@ import PetListings from "./pages/PetListings.jsx"; // Pet listings of card displ
 
 function App() {
   return (
-    <Router basename="/pet-adoption-app">
+    <Router
+      basename="/pet-adoption-app"
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutUs />} />

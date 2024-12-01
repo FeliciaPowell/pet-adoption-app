@@ -77,30 +77,66 @@ const AccountCreation = () => {
     };
 
     // Submit account creation
+    // const handleSubmit = async () => {
+    //     setLoading(true);
+    //     setError("");
+    //     try {
+    //         const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
+
+    //         const response = await axios.put("http://localhost:3000/user/account-setup", payload);
+
+    //         if (response.status === 201) {
+    //             setModalActive(true);
+    //             localStorage.clear(); // Clear saved credentials
+    //             setTimeout(() => {
+    //                 setModalActive(false);
+    //                 navigate("/login"); // Redirect after showing modal
+    //             }, 3000);
+    //         } else {
+    //             setError("Failed to create account. Please try again.");
+    //         }
+    //     } catch (err) {
+    //         setError("Failed to create account: " + (err.response?.data?.error || err.message));
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async () => {
         setLoading(true);
         setError("");
         try {
-            const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
-
-            const response = await axios.put("http://localhost:3000/user/account-setup", payload);
-
-            if (response.status === 201) {
-                setModalActive(true);
-                localStorage.clear(); // Clear saved credentials
-                setTimeout(() => {
-                    setModalActive(false);
-                    navigate("/login"); // Redirect after showing modal
-                }, 3000);
-            } else {
-                setError("Failed to create account. Please try again.");
-            }
+          const { confirmPassword, kids, cats, dogs, otherPets, ...rest } = userDetails;
+      
+          // Nest additional info
+          const payload = {
+            ...rest,
+            additionalInfo: { kids, cats, dogs, otherPets },
+          };
+      
+          console.log("Payload:", payload);
+      
+          const response = await axios.put("http://localhost:3000/user/account-setup", payload);
+          console.log("Response:", response);
+      
+          if (response.status === 201) {
+            setModalActive(true);
+            localStorage.clear();
+            setTimeout(() => {
+              setModalActive(false);
+              navigate("/login");
+            }, 3000);
+          } else {
+            setError("Failed to create account. Please try again.");
+          }
         } catch (err) {
-            setError("Failed to create account: " + (err.response?.data?.error || err.message));
+          console.error("Error:", err.response || err);
+          setError("Failed to create account: " + (err.response?.data?.error || err.message));
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
+               
 
     return (
         <Layout footerType="default">
