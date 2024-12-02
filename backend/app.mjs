@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Creates Token to send to FrontEnd
 const createToken = (user) => {
-  return jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET);
+  return jwt.sign({ userId: user._id }, JWT_SECRET);
 };
 
 // Authenticates User's with Token for Routes
@@ -50,6 +50,11 @@ const isAdmin = (req, res, next) => {
 // Test Route (DELETE)
 app.get("/protected", authenticateToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user });
+});
+
+// Test Route (DELETE)
+app.get("/admin", authenticateToken, isAdmin, (req, res) => {
+  res.json({ message: "This is an admin route", user: req.user });
 });
 
 // Test Route (DELETE)
@@ -88,58 +93,80 @@ app.post("/login", async (req, res) => {
   }
 
   try {
+    console.time("DB Query");
     const user = await users.getUserByEmail(email);
+    console.timeEnd("DB Query");
 
     if (!user || user.length === 0) {
       return res.status(404).json({ error: "Email not found in database." });
     }
 
+    console.time("Password Check");
     const isPasswordValid = await hash.checkHash(password, user[0].password);
+    console.timeEnd("Password Check");
+
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid password." });
     }
 
-    // Include role in the token payload
-    const token = createToken({ userId: user[0]._id, role: user[0].role || "pending" }); // Default "pending" role if not assigned yet
+    console.time("Token Generation");
+    const token = createToken({ userId: user[0]._id });
+    console.timeEnd("Token Generation");
+
     res.json({ token });
   } catch (error) {
-    console.error("Error during login:", error.message);
+    console.error("Login error:", error.message);
     res.status(500).json({ error: "Internal server error. Please try again later." });
   }
 });
 
 // User Registration Route
-app.post("/user", async (req, res) => {
-  console.log("Incoming registration data:", req.body);
-
+app.put("/user/account-setup", authenticateToken, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, firstName, lastName, address, birthday, additionalInfo } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required." });
+    if (!email || !firstName || !lastName || !address || !birthday) {
+      return res.status(400).json({
+        error: "Email, first name, last name, address, and birthday are required.",
+      });
     }
 
-    const hashedPassword = await hash.createHash(password);
+    const updates = {
+      name: `${firstName} ${lastName}`,
+      address,
+      birthday,
+      additionalInfo: additionalInfo || {}, // Default to empty object if undefined
+      status: "complete",
+    };
 
-    const newUser = await users.createUser({
-      email,
-      password: hashedPassword,
-      name: "Pending Name", // Placeholder name
-      role: "pending", // Default role is "pending"
-      status: "pending", // Indicates account is incomplete
-    });
+    console.log("Attempting to update user:", updates);
 
-    res.status(201).json({ message: "User registered successfully.", user: newUser });
+    const updatedUser = await users.updateUserByEmail(email, updates);
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    res.status(200).json({ message: "Account setup complete.", user: updatedUser });
   } catch (error) {
-    console.error("Error creating user:", error.message);
-
-    if (error.message.includes("duplicate key error")) {
-      return res.status(400).json({ error: "Email already in use." });
-    }
-
-    res.status(500).json({ error: "Error adding user. Check parameters." });
+    console.error("Error during account setup:", error.message);
+    res.status(500).json({ error: "Internal server error. Please try again." });
   }
 });
+
+// Find and update the user with email
+async function updateUserByEmail(email, updates) {
+  console.log("Searching for user with email:", email);
+
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate({ email }, updates, { new: true });
+    console.log("User updated:", updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user:", error.message);
+    throw error;
+  }
+}
 
 // Fetch Current User Route
 app.get("/current-user", authenticateToken, async (req, res) => {
@@ -150,73 +177,50 @@ app.get("/current-user", authenticateToken, async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
-    res.json({ email: user.email, role: user.role || "pending" }); // Return role as "pending" if not set
+    res.json({
+      email: user.email,
+      name: user.name,
+      address: user.address,
+      birthday: user.birthday,
+      preferences: user.preferences || {},
+      status: user.status,
+    });
   } catch (error) {
     console.error("Error fetching current user:", error.message);
     res.status(500).json({ error: "Failed to fetch user details." });
   }
 });
 
-// Update Role Route
-app.put("/user/update-role", authenticateToken, async (req, res) => {
-  const { email, role } = req.body;
-
-  if (!email || !role || !["user", "admin"].includes(role)) {
-      return res.status(400).json({ error: "Valid email and role are required." });
-  }
-
-  console.log("Incoming request to update role:", { email, role });
-
-  try {
-      const updatedUser = await users.updateUserByEmail(email, { role });
-
-      if (!updatedUser) {
-          console.error("User not found for email:", email);
-          return res.status(404).json({ error: "User not found." });
-      }
-
-      console.log("User role updated successfully:", updatedUser);
-      res.status(200).json({ message: "Role updated successfully.", user: updatedUser });
-  } catch (error) {
-      console.error("Error updating role:", error.message);
-      res.status(500).json({ error: "Failed to update role. Please try again." });
-  }
-});
-
-
 // Account Completion Route
-app.put("/user/account-setup", authenticateToken, async (req, res) => {
-  const { email, role, firstName, lastName, address, birthday, additionalInfo } = req.body;
+app.post("/user/account-setup", authenticateToken, async (req, res) => {
+  const { email, firstName, lastName, address, birthday, additionalInfo } = req.body;
 
-  if (!email || !role || !["user", "admin"].includes(role)) {
-      return res.status(400).json({ error: "Email and valid role are required." });
+  // Ensure required fields are present
+  if (!email || !firstName || !lastName || !address || !birthday) {
+    return res.status(400).json({
+      error: "Email, first name, last name, address, and birthday are required.",
+    });
   }
 
-  const updates = { email, role, address, birthday, additionalInfo, status: "complete" };
+  additionalInfo,
 
-  if (role === "user") {
-      if (!firstName || !lastName) {
-          return res.status(400).json({ error: "First and last name are required for users." });
-      }
-      updates.firstName = firstName;
-      updates.lastName = lastName;
-  }
 
   console.log("Incoming account setup data:", updates);
 
   try {
-      const updatedUser = await users.updateUserByEmail(email, updates);
+    // Find and update the user
+    const updatedUser = await users.updateUserByEmail(email, updates);
 
-      if (!updatedUser) {
-          console.error("User not found for email:", email);
-          return res.status(404).json({ error: "User not found." });
-      }
+    if (!updatedUser) {
+      console.error("User not found for email:", email);
+      return res.status(404).json({ error: "User not found." });
+    }
 
-      console.log("Account setup complete:", updatedUser);
-      res.status(200).json({ message: "Account setup complete.", user: updatedUser });
+    console.log("Account setup complete:", updatedUser);
+    res.status(200).json({ message: "Account setup complete.", user: updatedUser });
   } catch (error) {
-      console.error("Error during account setup:", error.message);
-      res.status(500).json({ error: "Internal server error." });
+    console.error("Error during account setup:", error.message);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
@@ -275,7 +279,6 @@ app.post("/pet", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((pet) => {
@@ -311,7 +314,6 @@ app.put("/pets/:_id", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((numUpdated) => {

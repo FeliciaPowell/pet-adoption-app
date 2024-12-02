@@ -3,15 +3,9 @@ import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import AboutUs from "./pages/AboutUs";
 import AccountCreation from "./pages/AccountCreation";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdoptionListings from "./pages/AdoptionListings";
-import AdoptionManagement from "./pages/AdoptionManagement";
 import LoginPage from "./pages/LoginPage";
 import PersonProfile from "./pages/PersonProfile";
-import ShelterManagement from "./pages/ShelterManagement";
 import MoreInfoAdopters from "./pages/MoreInfoAdopters.jsx";
-import MoreInfoShelters from "./pages/MoreInfoShelters.jsx";
-import AddPet from "./pages/AddPet.jsx"; // Houses the pet intake form to add a pet for adoption
 import PetProfileView from "./pages/PetProfileView.jsx"; // Viewing of individual pet profiles
 import PetListings from "./pages/PetListings.jsx"; // Pet listings of card displayed pets
 
@@ -41,6 +35,20 @@ function App() {
         <Route path="/more_info_shelters" element={<MoreInfoShelters />} />
       </Routes>
     </Router>
+    // <>
+    //   <Router>
+    //       <Routes>
+    //         <Route path="/" element={<LandingPage />} />
+    //         <Route path="/about" element={<AboutUs />} />
+    //         <Route path="/account" element={<AccountCreation />} />
+    //         <Route path="/login" element={<LoginPage />} />
+    //         <Route path="/person" element={<PersonProfile />} />
+    //         <Route path="/pets/:_id" element={<PetProfileView />} />
+    //         <Route path="/pets" element={<PetListings />} />
+    //         <Route path="/more_info_adopters" element={<MoreInfoAdopters />} />
+    //       </Routes>
+    //   </Router>
+    // </>
   );
 }
 

@@ -24,11 +24,6 @@ const petSchema = mongoose.Schema({
   dogs: { type: String, required: true, enum: ["Yes", "No"] },
   temperament: { type: String, required: true },
   dateCreated: { type: Date, required: true, default: Date.now },
-  shelterID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Shelter",
-  }, // Foreign key reference to Shelter collection
   adopterID: {
     type: mongoose.Schema.Types.ObjectId,
     required: false,
@@ -61,7 +56,6 @@ const createPet = async (
   dogs,
   temperament,
   dateCreated,
-  shelterID,
   adopterID
 ) => {
   const pet = new Pet({
@@ -84,7 +78,6 @@ const createPet = async (
     dogs: dogs,
     temperament: temperament,
     dateCreated: dateCreated,
-    shelterID: shelterID,
     adopterID: adopterID,
   });
   return pet.save();
@@ -127,7 +120,6 @@ const replacePet = async (
   dogs,
   temperament,
   dateCreated,
-  shelterID,
   adopterID
 ) => {
   try {
@@ -153,7 +145,6 @@ const replacePet = async (
         dogs,
         temperament,
         dateCreated,
-        shelterID,
         adopterID,
       }
     );

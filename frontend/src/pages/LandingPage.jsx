@@ -3,7 +3,7 @@ import LandingPageDog from "../assets/landingPageDog.png"
 import LandingPageCat from "../assets/landingPageCat.png"
 import {Link} from "react-router-dom";
 const LandingPage = () => (
-    <Layout footerType="landing">
+    <Layout footerType="default">
         <div style={styles.imageContainer}>
             <img src={LandingPageDog} alt="A Golden Retriever" style = {styles.dogImage} />
             <img src={LandingPageCat} alt="A Striped Cat" style = {styles.catImage} />
@@ -51,7 +51,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f3f3f3',
+        backgroundColor: '#E0E9EB',
         borderRadius: '20px',
         padding: '5px 0px',
         marginTop: '-70px',
@@ -67,11 +67,11 @@ const styles = {
         textAlign: 'center',
     },
     joinButton: {
-        padding: '10px 20px',
-        fontSize: '18px',
-        fontWeight: 'bold',
+        padding: '1px 10px',
+        fontSize: '25px',
+        fontFamily: "'Modak', cursive",
         backgroundColor: 'black',
-        color: 'white',
+        color: '#E0E9EB',
         border: 'none',
         borderRadius: '10px',
         cursor: 'pointer',
