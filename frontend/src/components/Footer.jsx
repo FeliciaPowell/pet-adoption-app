@@ -1,13 +1,14 @@
 import React from 'react';
 import logo from '../assets/logo.png';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
         <footer style={styles.footer}>
             <div style={styles.topStripe}></div>
-            <a href="/" style={styles.logoLink}>
+            <Link to="/" style={styles.logoLink}>
                 <img src={logo} alt="Company Logo" style={styles.logo} />
-            </a>
+            </Link>
         </footer>
     );
 };
