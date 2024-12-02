@@ -61,6 +61,25 @@ const AccountCreation = () => {
     };
 
     // Next button handler
+    // const handleNext = (e) => {
+    //     e.preventDefault();
+    //     setError("");
+    //     if (currentStep === 1) {
+    //         if (!userDetails.email || !userDetails.password || !userDetails.confirmPassword) {
+    //             setError("Please fill in all required fields.");
+    //             return;
+    //         }
+    //         if (userDetails.password !== userDetails.confirmPassword) {
+    //             setError("Passwords do not match!");
+    //             return;
+    //         }
+    //     }
+    //     if (currentStep === 2) {
+    //         if (!userDetails.firstName || !userDetails.lastName || !userDetails.address || !userDetails.birthday) {
+    //             setError("Please complete all fields in this step.");
+    //             return;
+    //         }
+    //     }
     const handleNext = () => {
         if (currentStep === 1 && (!userDetails.password || userDetails.password !== userDetails.confirmPassword)) {
             setError("Passwords do not match!");
@@ -77,6 +96,31 @@ const AccountCreation = () => {
     };
 
     // Submit account creation
+    // const handleSubmit = async () => {
+    //     setLoading(true);
+    //     setError("");
+    //     try {
+    //         const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
+
+    //         const response = await axios.put("http://localhost:3000/user/account-setup", payload);
+
+    //         if (response.status === 201) {
+    //             setModalActive(true);
+    //             localStorage.clear(); // Clear saved credentials
+    //             setTimeout(() => {
+    //                 setModalActive(false);
+    //                 navigate("/login"); // Redirect after showing modal
+    //             }, 3000);
+    //         } else {
+    //             setError("Failed to create account. Please try again.");
+    //         }
+    //     } catch (err) {
+    //         setError("Failed to create account: " + (err.response?.data?.error || err.message));
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async () => {
         setLoading(true);
         setError("");
@@ -86,26 +130,27 @@ const AccountCreation = () => {
 
             if (response.status === 201) {
                 setModalActive(true);
-                localStorage.clear(); // Clear saved credentials
-                localStorage.setItem('user', JSON.stringify(response.data)); // Set user for Header
+
+                localStorage.clear();
                 setTimeout(() => {
                     setModalActive(false);
-                    navigate("/pets"); // Redirect after showing modal
-                }, 2000);
+                    navigate("/login");
+                }, 3000);
             } else {
                 setError("Failed to create account. Please try again.");
             }
         } catch (err) {
-            setError("Failed to create account: " + (err.response?.data?.error || err.message));
+          console.error("Error:", err.response || err);
+          setError("Failed to create account: " + (err.response?.data?.error || err.message));
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
+               
 
     return (
         <Layout footerType="default">
             <div className="account-wrapper">
-                {/* Progress Bar */}
                 <div className="create-account-header">
                     <ul>
                         <li className={`form-1-progressbar ${currentStep >= 1 ? "active" : ""}`}><div>1</div></li>
@@ -124,7 +169,6 @@ const AccountCreation = () => {
                     </div>
                 )}
 
-                {/* Error Message */}
                 {error && <p className="error-message">{error}</p>}
 
                 {/* Step 1: Account Details */}
@@ -166,7 +210,6 @@ const AccountCreation = () => {
                     </div>
                 )}
 
-                {/* Step 2: Personal Info */}
                 {currentStep === 2 && (
                     <div className="form-box step-2">
                         <h2>Personal Info</h2>
@@ -223,6 +266,7 @@ const AccountCreation = () => {
                         </form>
                     </div>
                 )}
+
                 {/* Step 3: Preferences */}
                 {currentStep === 3 && (
                     <div className="form-box">
@@ -242,7 +286,6 @@ const AccountCreation = () => {
                     </div>
                 )}
 
-                {/* Navigation Buttons */}
                 <div className="btns-wrap">
                     {currentStep > 1 && <Button className="btn-back" onClick={handleBack}>Back</Button>}
                     {currentStep === 3 ? (

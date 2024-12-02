@@ -34,18 +34,46 @@ const LoginSignin = () => {
         navigate("/account", { state: { email, password, confirmPassword } });
     };
 
+    // const handleLoginSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError(""); // Reset error message
+
+    //     try {
+    //         console.log("Logging in with:", { email, password });
+
+    //         const response = await axios.post("http://localhost:3000/login", {
+    //             email,
+    //             password,
+    //         });
+
+    //         if (response.status === 200) {
+    //             console.log("Login successful:", response.data);
+    //             localStorage.setItem("token", response.data.token); // Save token for authentication
+    //             navigate("/pets"); // Redirect to /pets upon successful login
+    //         } else {
+    //             setError("Login failed. Please check your email and password.");
+    //         }
+    //     } catch (err) {
+    //         console.error("Login error:", err.response?.data || err.message);
+    //         setError("Login failed. Please try again.");
+    //     }
+    // };
+
     const handleLoginSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form's default submission behavior
         setError(""); // Reset error message
-
+    
+        console.log("Login button clicked"); // Debugging log
+        console.log("Current email and password:", { email, password });
+    
         try {
-            console.log("Logging in with:", { email, password });
-
             const response = await axios.post("http://localhost:3000/login", {
                 email,
                 password,
             });
-
+    
+            console.log("Server response:", response); // Log server response for debugging
+    
             if (response.status === 200) {
                 console.log("Login successful:", response.data.user);
                 localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
@@ -58,6 +86,7 @@ const LoginSignin = () => {
             setError("Login failed. Please try again.");
         }
     };
+    
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
