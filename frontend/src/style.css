@@ -471,65 +471,44 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures it stays on top of everything */
     visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-wrapper .shadow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
     opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.modal-wrapper .success-wrap {
-    position: relative;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    z-index: 1001;
-    transition: transform 0.5s ease;
-}
-
-.modal-wrapper .success-wrap .modal-icon {
-    margin-right: 20px;
-    width: 50px;
-    height: 50px;
-    background: #6F94F1;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    rotate: -15deg;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal-wrapper.active {
     visibility: visible;
+    opacity: 1;
 }
 
-.modal-wrapper.active .shadow {
-    opacity: 0.8;
-}
-
-.modal-wrapper.active .success-wrap {
-    transform: translateY(0);
+.modal-wrapper .modal-content {
+    background: rgba(255, 255, 255, 0.9); /* White background with slight transparency */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1001; /* Ensures modal content is above overlay */
 }
 
 /* Specific styling for Personal Info section */
 .form-box.step-2 {
-    margin-top: -50px;
-    transform: translateY(-20px);
+    margin-top: 10px; /* Move the section down */
+    transform: translateY(10px); /* Adjust positioning for smooth appearance */
     transition: transform 0.3s ease, margin-top 0.3s ease;
+    text-align: center; /* Ensure alignment */
+    margin-bottom: -20px;
 }
 
+.form-box.step-2 h2 {
+    font-size: 28px; /* Adjust the heading size if needed */
+    margin-bottom: 5px; /* Space between the heading and the form */
+    margin-top: -20px; /* Push the heading down */
+    color: #000000; /* Ensure visibility */
+    font-weight: bold; /* Make it stand out */
+    font-family: 'Modak'; /* Use your chosen font */
+}

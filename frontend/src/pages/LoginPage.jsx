@@ -34,31 +34,6 @@ const LoginSignin = () => {
         navigate("/account", { state: { email, password, confirmPassword } });
     };
 
-    // const handleLoginSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setError(""); // Reset error message
-
-    //     try {
-    //         console.log("Logging in with:", { email, password });
-
-    //         const response = await axios.post("http://localhost:3000/login", {
-    //             email,
-    //             password,
-    //         });
-
-    //         if (response.status === 200) {
-    //             console.log("Login successful:", response.data);
-    //             localStorage.setItem("token", response.data.token); // Save token for authentication
-    //             navigate("/pets"); // Redirect to /pets upon successful login
-    //         } else {
-    //             setError("Login failed. Please check your email and password.");
-    //         }
-    //     } catch (err) {
-    //         console.error("Login error:", err.response?.data || err.message);
-    //         setError("Login failed. Please try again.");
-    //     }
-    // };
-
     const handleLoginSubmit = async (e) => {
         e.preventDefault(); // Prevent form's default submission behavior
         setError(""); // Reset error message
@@ -76,6 +51,9 @@ const LoginSignin = () => {
     
             if (response.status === 200) {
                 console.log("Login successful:", response.data.user);
+                const token = response.data.token;
+                console.log("Received token:", token); // Log the token
+                localStorage.setItem("token", token); // Save token
                 localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
                 navigate("/pets"); // Redirect to /pets upon successful login
             } else {
@@ -87,7 +65,6 @@ const LoginSignin = () => {
         }
     };
     
-
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const mode = params.get("mode");
