@@ -191,7 +191,7 @@ const styles = {
     justifyContent: "space-between",
     padding: "0 40px",
     marginBottom: "10px",
-    marginTop: "155px",
+    marginTop: "200px",
   },
   button: {
     backgroundColor: "#000000",
