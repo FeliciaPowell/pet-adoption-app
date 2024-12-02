@@ -1,18 +1,5 @@
 import bcrypt from "bcrypt";
 
-// const createHash = async (userPassword) => {
-//   try {
-//     const saltRounds = 10;
-//     const salt = await bcrypt.genSalt(saltRounds);
-//     const hash = await bcrypt.hash(userPassword, salt);
-
-//     return hash; // Return hashed password
-//   } catch (error) {
-//     console.error("Error generating hash:", error);
-//     throw error;
-//   }
-// };
-
 const createHash = async (userPassword) => {
   try {
     console.log("Password received for hashing:", userPassword); // Debugging log

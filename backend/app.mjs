@@ -23,18 +23,31 @@ const createToken = (user) => {
 };
 
 // Authenticates User's with Token for Routes
+// const authenticateToken = (req, res, next) => {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
+
+//   if (!token) {
+//     return res.status(401); // Token not found
+//   }
+
+//   // Verify Token
+//   jwt.verify(token, JWT_SECRET, (err, user) => {
+//     if (err) return res.status(403); // Invalid Token
+//     req.user = user;
+//     next();
+//   });
+// };
+
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Token not found" });
 
-  if (!token) {
-    return res.status(401); // Token not found
-  }
-
-  // Verify Token
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403); // Invalid Token
-    req.user = user;
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ error: "Invalid token" });
+    console.log("Decoded Token Payload:", decoded); // Debug log
+    req.user = decoded;
     next();
   });
 };
@@ -61,28 +74,6 @@ app.get("/admin", authenticateToken, isAdmin, (req, res) => {
 app.get("/admin", authenticateToken, isAdmin, (req, res) => {
   res.json({ message: "This is an admin route", user: req.user });
 });
-
-// app.post("/login", (req, res) => {
-//   const { email, password } = req.body;
-//   console.log(email)
-//   users
-//     .getUserByEmail(email)
-//     .then((user) => {
-//       // Check the password
-//       if (hash.checkHash(password, user[0].password)) {
-//         // Create Token
-//         const token = createToken(user[0]);
-//         res.json({ token });
-//       } else {
-//         // Password Incorrect
-//         res.send({ Error: "Password is incorrect" });
-//       }
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.send({ Error: "Email is not found in database" });
-//     });
-// });
 
 // Login Route
 app.post("/login", async (req, res) => {
@@ -169,27 +160,42 @@ async function updateUserByEmail(email, updates) {
 }
 
 // Fetch Current User Route
+// app.get("/current-user", authenticateToken, async (req, res) => {
+//   try {
+//     const user = await users.getUserById(req.user.userId);
+
+//     if (!user) {
+//       return res.status(404).json({ error: "User not found." });
+//     }
+
+//     res.json({
+//       email: user.email,
+//       name: user.name,
+//       address: user.address,
+//       birthday: user.birthday,
+//       preferences: user.preferences || {},
+//       status: user.status,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching current user:", error.message);
+//     res.status(500).json({ error: "Failed to fetch user details." });
+//   }
+// });
+
 app.get("/current-user", authenticateToken, async (req, res) => {
   try {
-    const user = await users.getUserById(req.user.userId);
-
+    console.log("Fetching user with ID:", req.user.userId); // Add debug log
+    const user = await User.findById(req.user.userId); // Query using userId
     if (!user) {
-      return res.status(404).json({ error: "User not found." });
+      return res.status(404).json({ error: "User not found" });
     }
-
-    res.json({
-      email: user.email,
-      name: user.name,
-      address: user.address,
-      birthday: user.birthday,
-      preferences: user.preferences || {},
-      status: user.status,
-    });
+    res.json(user);
   } catch (error) {
-    console.error("Error fetching current user:", error.message);
+    console.error("Error fetching user:", error.message);
     res.status(500).json({ error: "Failed to fetch user details." });
   }
 });
+
 
 // Account Completion Route
 app.post("/user/account-setup", authenticateToken, async (req, res) => {

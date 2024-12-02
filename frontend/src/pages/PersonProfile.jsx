@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../components/Layout";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ProfilePage = () => {
@@ -7,37 +7,35 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [description, setDescription] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
 
-  // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found in localStorage");
+        }
+
+        console.log("Token being sent:", token);
+
         const response = await axios.get("http://localhost:3000/current-user", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
+
+        console.log("User data fetched:", response.data);
         setUserData(response.data);
         setDescription(response.data.additionalInfo?.profileDescription || "");
         setProfileImage(response.data.profileImage || null);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error.response?.data || error.message);
+        alert("Failed to fetch user details. Please log in again.");
+        navigate("/login");
       }
     };
 
     fetchUserData();
-  }, []);
-  const [userInfo, setUserInfo] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        address: "",
-        birthday: "",
-        kids: false,
-        cats: false,
-        dogs: false,
-        otherPets: false,
-  });
+  }, [navigate]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -60,11 +58,14 @@ const ProfilePage = () => {
           },
         };
 
-        await axios.put(
-          `http://localhost:3000/users/id/${userData._id}`,
-          updates,
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found in localStorage");
+        }
+
+        await axios.put(`http://localhost:3000/users/id/${userData._id}`, updates, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         alert("Profile description saved!");
       } catch (error) {
@@ -76,102 +77,177 @@ const ProfilePage = () => {
   };
 
   if (!userData) {
-    return <div>Loading...</div>; // Display a loader until the data is fetched
+    return <div>Loading...</div>;
   }
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserInfo(JSON.parse(storedUser))
-    }
-  }, [])
 
   return (
-    <Layout footerType="profile">
-      <div style={styles.pageContainer}>
-        {/* Profile Header Section */}
-        <div style={styles.profileHeader}>
-          <div style={styles.profileImageContainer}>
-            {profileImage ? (
-              <img src={profileImage} alt="Profile" style={styles.profileImage} />
-            ) : (
-              <div style={styles.placeholder}>
-                <p style={styles.placeholderText}>Upload Photo</p>
-              </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              style={styles.fileInput}
-              onChange={handleImageUpload}
-            />
-          </div>
-          {/* Profile Info */}
-          <div style={styles.profileInfo}>
-            <h2 style={styles.username}>{userInfo.firstName} {userInfo.lastName}</h2>
-            <div style={styles.infoGrid}>
-              <div>
-                <p><strong>Email:</strong> {userInfo.email}</p>
-                <p><strong>Address:</strong> {userInfo.address}</p>
-                <p><strong>Birthday:</strong> {userInfo.birthday}</p>
-              </div>
-              <div>
-                <p><strong>Do You Have Cats?</strong> {userInfo.cats ? "Yes" : "No"}</p>
-                <p><strong>Do You Have Dogs?</strong> {userInfo.dogs ? "Yes" : "No"}</p>
-                <p><strong>Do You Have Kids?</strong> {userInfo.kids ? "Yes" : "No"}</p>
-              </div>
+    <div style={styles.pageContainer}>
+      <div style={styles.profileHeader}>
+        <div style={styles.profileImageContainer}>
+          {profileImage ? (
+            <img src={profileImage} alt="Profile" style={styles.profileImage} />
+          ) : (
+            <div style={styles.placeholder}>
+              <p style={styles.placeholderText}>Upload Photo</p>
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            style={styles.fileInput}
+            onChange={handleImageUpload}
+          />
+        </div>
+        <div style={styles.profileInfo}>
+          <h1 style={styles.username}>
+            {userData.firstName} {userData.lastName}'s Profile
+          </h1>
+          <div style={styles.infoGrid}>
+            <div>
+              <p>
+                <strong>Email:</strong> {userData.email}
+              </p>
+              <p>
+                <strong>Address:</strong> {userData.address}
+              </p>
+              <p>
+                <strong>Birthday:</strong> {userData.birthday}
+              </p>
+            </div>
+            <div>
+              <p>
+                <strong>Do You Have Cats?</strong> {userData.additionalInfo?.cats ? "Yes" : "No"}
+              </p>
+              <p>
+                <strong>Do You Have Dogs?</strong> {userData.additionalInfo?.dogs ? "Yes" : "No"}
+              </p>
+              <p>
+                <strong>Do You Have Kids?</strong> {userData.additionalInfo?.kids ? "Yes" : "No"}
+              </p>
             </div>
           </div>
         </div>
-
       </div>
-    </Layout>
+
+      <div style={styles.descriptionSection}>
+        <h3 style={styles.sectionTitle}>About Me</h3>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Tell us about yourself..."
+          style={styles.textArea}
+          disabled={!isEditing}
+        />
+        <button style={styles.button} onClick={handleSaveOrEdit}>
+          {isEditing ? "Save" : "Edit"}
+        </button>
+      </div>
+    </div>
   );
 };
 
 const styles = {
   pageContainer: {
-    maxWidth: "800px",
-    margin: "0 auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    minHeight: "100vh",
     padding: "20px",
-    backgroundColor: "#ffffff",
-    borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#e6f0ff",
+    boxSizing: "border-box",
   },
   profileHeader: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: "50px",
+    marginBottom: "20px",
+  },
+  profileImageContainer: {
+    position: "relative",
+    width: "200px",
+    height: "200px",
+    borderRadius: "50%",
+    overflow: "hidden",
+    backgroundColor: "#d9d9d9",
+    marginBottom: "10px",
+    border: "4px solid #4CAF50",
+  },
+  profileImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  placeholder: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+    color: "#aaa",
+    fontSize: "16px",
+    textTransform: "uppercase",
+  },
+  fileInput: {
+    position: "absolute",
+    bottom: "0",
+    width: "100%",
+    height: "100%",
+    opacity: 0,
+    cursor: "pointer",
+  },
+  profileInfo: {
     textAlign: "center",
-    borderBottom: "2px solid #f4f4f4",
-    paddingBottom: "20px",
   },
   username: {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
+    fontSize: "32px",
+    fontWeight: "600",
+    marginBottom: "20px",
+    color: "#333",
   },
   infoGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     gap: "20px",
+    fontSize: "16px",
+    color: "#555",
   },
-  profileImage: {
-    width: "150px",
+  descriptionSection: {
+    width: "100%",
+    maxWidth: "800px",
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    textAlign: "center",
+    marginTop: "20px",
+  },
+  sectionTitle: {
+    fontSize: "22px",
+    fontWeight: "600",
+    marginBottom: "10px",
+    color: "#333",
+  },
+  textArea: {
+    width: "100%",
     height: "150px",
-    borderRadius: "50%",
-    objectFit: "cover",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    padding: "10px",
+    fontSize: "16px",
+    fontFamily: "Arial, sans-serif",
+    boxSizing: "border-box",
+    marginBottom: "10px",
+    resize: "none",
   },
-  placeholder: {
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    backgroundColor: "#ccc",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  placeholderText: {
-    fontSize: "1rem",
-    color: "#666",
-  },
-  fileInput: {
-    marginTop: "10px",
+  button: {
+    backgroundColor: "#4CAF50",
+    color: "#fff",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    textTransform: "uppercase",
   },
 };
 
