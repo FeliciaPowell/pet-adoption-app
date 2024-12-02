@@ -57,6 +57,11 @@ app.get("/admin", authenticateToken, isAdmin, (req, res) => {
   res.json({ message: "This is an admin route", user: req.user });
 });
 
+// Test Route (DELETE)
+app.get("/admin", authenticateToken, isAdmin, (req, res) => {
+  res.json({ message: "This is an admin route", user: req.user });
+});
+
 // app.post("/login", (req, res) => {
 //   const { email, password } = req.body;
 //   console.log(email)
@@ -280,7 +285,6 @@ app.post("/pet", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((pet) => {
@@ -316,7 +320,6 @@ app.put("/pets/:_id", (req, res) => {
       req.body.dogs,
       req.body.temperament,
       req.body.dateCreated,
-      req.body.shelterID,
       req.body.adopterID
     )
     .then((numUpdated) => {

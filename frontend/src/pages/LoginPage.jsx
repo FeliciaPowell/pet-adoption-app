@@ -47,8 +47,8 @@ const LoginSignin = () => {
             });
 
             if (response.status === 200) {
-                console.log("Login successful:", response.data);
-                localStorage.setItem("token", response.data.token); // Save token for authentication
+                console.log("Login successful:", response.data.user);
+                localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
                 navigate("/pets"); // Redirect to /pets upon successful login
             } else {
                 setError("Login failed. Please check your email and password.");
