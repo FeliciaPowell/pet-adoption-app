@@ -14,7 +14,9 @@ const PetProfileView = () => {
   useEffect(() => {
     const fetchPetData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/pets/${_id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pets/${_id}`
+        );
         setPetData(response.data); // Store pet data in state
       } catch (error) {
         setError("Failed to fetch pet data");

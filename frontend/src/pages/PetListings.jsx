@@ -19,7 +19,9 @@ const PetListings = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/pets");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pets`
+        );
         setPets(response.data);
       } catch (error) {
         setError("Failed to fetch pets");
