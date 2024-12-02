@@ -19,16 +19,22 @@ const ProfilePage = () => {
 
         console.log("Token being sent:", token);
 
-        const response = await axios.get("http://localhost:3000/current-user", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/current-user`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         console.log("User data fetched:", response.data);
         setUserData(response.data);
         setDescription(response.data.additionalInfo?.profileDescription || "");
         setProfileImage(response.data.profileImage || null);
       } catch (error) {
-        console.error("Error fetching user data:", error.response?.data || error.message);
+        console.error(
+          "Error fetching user data:",
+          error.response?.data || error.message
+        );
         alert("Failed to fetch user details. Please log in again.");
         navigate("/login");
       }
@@ -63,9 +69,13 @@ const ProfilePage = () => {
           throw new Error("Token not found in localStorage");
         }
 
-        await axios.put(`http://localhost:3000/users/id/${userData._id}`, updates, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/users/id/${userData._id}`,
+          updates,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         alert("Profile description saved!");
       } catch (error) {
@@ -116,13 +126,16 @@ const ProfilePage = () => {
             </div>
             <div>
               <p>
-                <strong>Do You Have Cats?</strong> {userData.additionalInfo?.cats ? "Yes" : "No"}
+                <strong>Do You Have Cats?</strong>{" "}
+                {userData.additionalInfo?.cats ? "Yes" : "No"}
               </p>
               <p>
-                <strong>Do You Have Dogs?</strong> {userData.additionalInfo?.dogs ? "Yes" : "No"}
+                <strong>Do You Have Dogs?</strong>{" "}
+                {userData.additionalInfo?.dogs ? "Yes" : "No"}
               </p>
               <p>
-                <strong>Do You Have Kids?</strong> {userData.additionalInfo?.kids ? "Yes" : "No"}
+                <strong>Do You Have Kids?</strong>{" "}
+                {userData.additionalInfo?.kids ? "Yes" : "No"}
               </p>
             </div>
           </div>
