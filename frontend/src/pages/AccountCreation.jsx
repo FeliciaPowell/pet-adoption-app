@@ -70,18 +70,15 @@ const AccountCreation = () => {
     }));
   };
 
-  const handleNext = () => {
-    if (
-      currentStep === 1 &&
-      (!userDetails.password ||
-        userDetails.password !== userDetails.confirmPassword)
-    ) {
-      setError("Passwords do not match!");
-      return;
-    }
-    setError("");
-    setCurrentStep((prev) => prev + 1);
-  };
+    // Next button handler
+    const handleNext = () => {
+        if (currentStep === 1 && (!userDetails.password || userDetails.password !== userDetails.confirmPassword)) {
+            setError("Passwords do not match!");
+            return;
+        }
+        setError("");
+        setCurrentStep((prev) => prev + 1);
+    };
 
   // Back button handler
   const handleBack = () => {
@@ -100,57 +97,35 @@ const AccountCreation = () => {
         payload
       );
 
-      if (response.status === 201) {
-        setModalActive(true);
+            if (response.status === 201) {
+                setModalActive(true);
+                localStorage.clear(); // Clear saved credentials
+                localStorage.setItem('user', JSON.stringify(response.data)); // Set user for Header
+                setTimeout(() => {
+                    setModalActive(false);
+                    navigate("/pets"); // Redirect after showing modal
+                }, 2000);
+            } else {
+                setError("Failed to create account. Please try again.");
+            }
+        } catch (err) {
+            setError("Failed to create account: " + (err.response?.data?.error || err.message));
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        localStorage.clear();
-        setTimeout(() => {
-          setModalActive(false);
-          navigate("/login");
-        }, 3000);
-      } else {
-        setError("Failed to create account. Please try again.");
-      }
-    } catch (err) {
-      console.error("Error:", err.response || err);
-      setError(
-        "Failed to create account: " +
-          (err.response?.data?.error || err.message)
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Layout footerType="default">
-      <div className="account-wrapper">
-        <div className="create-account-header">
-          <ul>
-            <li
-              className={`form-1-progressbar ${
-                currentStep >= 1 ? "active" : ""
-              }`}
-            >
-              <div>1</div>
-            </li>
-            <li
-              className={`form-2-progressbar ${
-                currentStep >= 2 ? "active" : ""
-              }`}
-            >
-              <div>2</div>
-            </li>
-            <li
-              className={`form-3-progressbar ${
-                currentStep === 3 ? "active" : ""
-              }`}
-            >
-              <div>3</div>
-            </li>
-          </ul>
-        </div>
-
+    return (
+        <Layout footerType="default">
+            <div className="account-wrapper">
+                {/* Progress Bar */}
+                <div className="create-account-header">
+                    <ul>
+                        <li className={`form-1-progressbar ${currentStep >= 1 ? "active" : ""}`}><div>1</div></li>
+                        <li className={`form-2-progressbar ${currentStep >= 2 ? "active" : ""}`}><div>2</div></li>
+                        <li className={`form-3-progressbar ${currentStep === 3 ? "active" : ""}`}><div>3</div></li>
+                    </ul>
+                </div>
         {/* Success Modal */}
         {modalActive && (
           <div className="modal-wrapper active">
@@ -161,7 +136,8 @@ const AccountCreation = () => {
           </div>
         )}
 
-        {error && <p className="error-message">{error}</p>}
+                {/* Error Message */}
+                {error && <p className="error-message">{error}</p>}
 
         {/* Step 1: Account Details */}
         {currentStep === 1 && (
@@ -212,124 +188,97 @@ const AccountCreation = () => {
           </div>
         )}
 
-        {currentStep === 2 && (
-          <div className="form-box step-2">
-            <h2>Personal Info</h2>
-            <form>
-              <div className="input-box">
-                <input
-                  type="text"
-                  value={userDetails.firstName}
-                  onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
-                  }
-                  required
-                />
-                <label>First Name</label>
-                <i>
-                  <FontAwesomeIcon icon={faUser} />
-                </i>
-              </div>
-              <div className="input-box">
-                <input
-                  type="text"
-                  value={userDetails.lastName}
-                  onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
-                  }
-                  required
-                />
-                <label>Last Name</label>
-                <i>
-                  <FontAwesomeIcon icon={faUser} />
-                </i>
-              </div>
-              <div className="input-box">
-                <input
-                  type="text"
-                  value={userDetails.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  required
-                />
-                <label>Address</label>
-                <i>
-                  <FontAwesomeIcon icon={faAddressBook} />
-                </i>
-              </div>
-              <div className="input-box">
-                <input
-                  type="text"
-                  placeholder=""
-                  value={userDetails.birthday}
-                  onFocus={(e) => {
-                    e.target.type = "date";
-                    e.target.placeholder = "mm/dd/yyyy";
-                  }}
-                  onBlur={(e) => {
-                    e.target.type = userDetails.birthday ? "date" : "text";
-                    e.target.placeholder = "";
-                  }}
-                  onChange={(e) =>
-                    handleInputChange("birthday", e.target.value)
-                  }
-                  required
-                />
-                <label>Birthday</label>
-                <i>
-                  <FontAwesomeIcon icon={faCakeCandles} />
-                </i>
-              </div>
-            </form>
-          </div>
-        )}
+                {/* Step 2: Personal Info */}
+                {currentStep === 2 && (
+                    <div className="form-box step-2">
+                        <h2>Personal Info</h2>
+                        <form>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    value={userDetails.firstName}
+                                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                                    required
+                                />
+                                <label>First Name</label>
+                                <i><FontAwesomeIcon icon={faUser} /></i>
+                            </div>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    value={userDetails.lastName}
+                                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                                    required
+                                />
+                                <label>Last Name</label>
+                                <i><FontAwesomeIcon icon={faUser} /></i>
+                            </div>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    value={userDetails.address}
+                                    onChange={(e) => handleInputChange("address", e.target.value)}
+                                    required
+                                />
+                                <label>Address</label>
+                                <i><FontAwesomeIcon icon={faAddressBook} /></i>
+                            </div>
+                            <div className="input-box">
+                                <input
+                                    type="text"
+                                    placeholder=""
+                                    value={userDetails.birthday}
+                                    onFocus={(e) => {
+                                        e.target.type = "date";
+                                        e.target.placeholder = "mm/dd/yyyy";
+                                    }}
+                                    onBlur={(e) => {
+                                        e.target.type = userDetails.birthday ? "date" : "text";
+                                        e.target.placeholder = "";
+                                    }}
+                                    onChange={(e) => handleInputChange("birthday", e.target.value)}
+                                    required
+                                />
+                                <label>Birthday</label>
+                                <i><FontAwesomeIcon icon={faCakeCandles} /></i>
+                            </div>
+                        </form>
+                    </div>
+                )}
+                {/* Step 3: Preferences */}
+                {currentStep === 3 && (
+                    <div className="form-box">
+                        <h2>Preferences</h2>
+                        <form className="checkbox-group">
+                            {[{ key: "kids", label: "Do you have kids?" }, { key: "cats", label: "Do you have cats?" }, { key: "dogs", label: "Do you have dogs?" }, { key: "otherPets", label: "Do you have other pets?" }].map(({ key, label }) => (
+                                <label key={key}>
+                                    <input
+                                        type="checkbox"
+                                        checked={userDetails[key]}
+                                        onChange={(e) => handleInputChange(key, e.target.checked)}
+                                    />
+                                    {label}
+                                </label>
+                            ))}
+                        </form>
+                    </div>
+                )}
 
-        {/* Step 3: Preferences */}
-        {currentStep === 3 && (
-          <div className="form-box">
-            <h2>Preferences</h2>
-            <form className="checkbox-group">
-              {[
-                { key: "kids", label: "Do you have kids?" },
-                { key: "cats", label: "Do you have cats?" },
-                { key: "dogs", label: "Do you have dogs?" },
-                { key: "otherPets", label: "Do you have other pets?" },
-              ].map(({ key, label }) => (
-                <label key={key}>
-                  <input
-                    type="checkbox"
-                    checked={userDetails[key]}
-                    onChange={(e) => handleInputChange(key, e.target.checked)}
-                  />
-                  {label}
-                </label>
-              ))}
-            </form>
-          </div>
-        )}
+                {/* Navigation Buttons */}
+                <div className="btns-wrap">
+                    {currentStep > 1 && <Button className="btn-back" onClick={handleBack}>Back</Button>}
+                    {currentStep === 3 ? (
+                        <Button className="btn-next" onClick={handleSubmit} disabled={loading}>
+                            {loading ? "Submitting..." : "Complete"}
+                        </Button>
+                    ) : (
+                        <Button className="btn-next" onClick={handleNext}>Next</Button>
+                    )}
+                </div>
+            </div>
+        </Layout>
+    );
 
-        <div className="btns-wrap">
-          {currentStep > 1 && (
-            <Button className="btn-back" onClick={handleBack}>
-              Back
-            </Button>
-          )}
-          {currentStep === 3 ? (
-            <Button
-              className="btn-next"
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? "Submitting..." : "Complete"}
-            </Button>
-          ) : (
-            <Button className="btn-next" onClick={handleNext}>
-              Next
-            </Button>
-          )}
-        </div>
-      </div>
-    </Layout>
-  );
 };
 
 export default AccountCreation;
