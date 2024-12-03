@@ -93,7 +93,7 @@ const AccountCreation = () => {
     try {
       const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/user/`,
+        `https://lumpy-brass-lemongrass.glitch.me/user/`,
         payload
       );
 
