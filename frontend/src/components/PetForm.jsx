@@ -61,7 +61,7 @@ const PetForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/pet", formData);
+      const response = await axios.post("https://lumpy-brass-lemongrass.glitch.me/pet", formData);
       console.log("Pet added successfully:", response.data);
       navigate("/pets"); // Redirect to the pets listing page after success
     } catch (error) {

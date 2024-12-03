@@ -82,7 +82,7 @@ const AccountCreation = () => {
         setError("");
         try {
             const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
-            const response = await axios.post("http://localhost:3000/user/", payload);
+            const response = await axios.post("https://lumpy-brass-lemongrass.glitch.me/user/", payload);
 
             if (response.status === 201) {
                 setModalActive(true);
