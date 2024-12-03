@@ -8,37 +8,33 @@ import Layout from "../components/Layout.jsx";
 import Button from "../components/Button";
 
 const LoginSignin = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [isRegister, setIsRegister] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
-  const [error, setError] = useState("");
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [isRegister, setIsRegister] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
+    const [error, setError] = useState("");
 
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-  const handleConfirmPasswordChange = (event) =>
-    setConfirmPassword(event.target.value);
+    const handleEmailChange = (event) => setEmail(event.target.value);
+    const handlePasswordChange = (event) => setPassword(event.target.value);
+    const handleConfirmPasswordChange = (event) =>
+        setConfirmPassword(event.target.value);
 
-  // Navigate to AccountCreation with required data
-  const goToAccountCreation = (e) => {
-    e.preventDefault();
+    // Navigate to AccountCreation with required data
+    const goToAccountCreation = (e) => {
+        e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
-
-    console.log("Navigating with state:", { email, password, confirmPassword });
-
-    navigate("/account", { state: { email, password, confirmPassword } });
-  };
+        if (password !== confirmPassword) {
+            setError("Passwords do not match!");
+            return;
+        }
 
         console.log("Navigating with state:", { email, password, confirmPassword });
 
         navigate("/account", { state: { email, password, confirmPassword } });
     };
+
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
@@ -98,23 +94,23 @@ const LoginSignin = () => {
                     <h2 className="animation" style={{ "--time": 0, "--reverse-time": 21 }}>LOGIN</h2>
                     <form onSubmit={handleLoginSubmit}>
                         <div className="input-box animation" style={{ "--time": 1, "--reverse-time": 22 }}>
-                            <input 
-                                type="email" 
-                                value={email} 
-                                onChange={handleEmailChange} 
-                                required 
-                                autoComplete="email" 
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={handleEmailChange}
+                                required
+                                autoComplete="email"
                             />
                             <label>EMAIL</label>
                             <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
                         <div className="input-box animation" style={{ "--time": 2, "--reverse-time": 23 }}>
-                            <input 
-                                type="password" 
-                                value={password} 
-                                onChange={handlePasswordChange} 
-                                required 
-                                autoComplete="current-password" 
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                required
+                                autoComplete="current-password"
                             />
                             <label>PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
@@ -141,34 +137,34 @@ const LoginSignin = () => {
                     <h2 className="animation" style={{ "--time": 17, "--reverse-time": 0 }}>SIGN UP</h2>
                     <form onSubmit={goToAccountCreation}>
                         <div className="input-box animation" style={{ "--time": 18, "--reverse-time": 1 }}>
-                            <input 
-                                type="email" 
-                                value={email} 
-                                onChange={handleEmailChange} 
-                                required 
-                                autoComplete="email" 
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={handleEmailChange}
+                                required
+                                autoComplete="email"
                             />
                             <label>EMAIL</label>
                             <i><FontAwesomeIcon icon={faEnvelope} /></i>
                         </div>
                         <div className="input-box animation" style={{ "--time": 19, "--reverse-time": 2 }}>
-                            <input 
-                                type="password" 
-                                value={password} 
-                                onChange={handlePasswordChange} 
-                                required 
-                                autoComplete="new-password" 
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                required
+                                autoComplete="new-password"
                             />
                             <label>PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
                         </div>
                         <div className="input-box animation" style={{ "--time": 20, "--reverse-time": 3 }}>
-                            <input 
-                                type="password" 
-                                value={confirmPassword} 
-                                onChange={handleConfirmPasswordChange} 
-                                required 
-                                autoComplete="new-password" 
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                required
+                                autoComplete="new-password"
                             />
                             <label>CONFIRM PASSWORD</label>
                             <i><FontAwesomeIcon icon={faLock} /></i>
@@ -190,11 +186,8 @@ const LoginSignin = () => {
                 </div>
 
             </div>
-          </form>
-        </div>
-      </div>
-    </Layout>
-  );
+        </Layout>
+    );
 };
 
 export default LoginSignin;
