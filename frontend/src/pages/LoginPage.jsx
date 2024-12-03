@@ -35,25 +35,19 @@ const LoginSignin = () => {
     };
 
     const handleLoginSubmit = async (e) => {
-        e.preventDefault(); // Prevent form's default submission behavior
+        e.preventDefault();
         setError(""); // Reset error message
-    
-        console.log("Login button clicked"); // Debugging log
-        console.log("Current email and password:", { email, password });
-    
+
         try {
+            console.log("Logging in with:", { email, password });
+
             const response = await axios.post("http://localhost:3000/login", {
                 email,
                 password,
             });
-    
-            console.log("Server response:", response); // Log server response for debugging
-    
+
             if (response.status === 200) {
                 console.log("Login successful:", response.data.user);
-                const token = response.data.token;
-                console.log("Received token:", token); // Log the token
-                localStorage.setItem("token", token); // Save token
                 localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
                 navigate("/pets"); // Redirect to /pets upon successful login
             } else {
@@ -64,7 +58,7 @@ const LoginSignin = () => {
             setError("Login failed. Please try again.");
         }
     };
-    
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const mode = params.get("mode");
