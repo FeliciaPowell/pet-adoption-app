@@ -22,7 +22,7 @@ const PetListings = () => {
     const fetchPets = async () => {
       try {
         const response = await axios.get(
-          `https://lumpy-brass-lemongrass.glitch.me/pets`
+          `https://lumpy-brass-lemongrass.glitch.me`
         );
         setAllPets(response.data); // Store unfiltered data
         setPets(response.data); // Initialize displayed pets
