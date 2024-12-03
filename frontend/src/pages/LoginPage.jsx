@@ -8,26 +8,32 @@ import Layout from "../components/Layout.jsx";
 import Button from "../components/Button";
 
 const LoginSignin = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [isRegister, setIsRegister] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
-    const [error, setError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
+  const [error, setError] = useState("");
 
-    const handleEmailChange = (event) => setEmail(event.target.value);
-    const handlePasswordChange = (event) => setPassword(event.target.value);
-    const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
+  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleConfirmPasswordChange = (event) =>
+    setConfirmPassword(event.target.value);
 
-    // Navigate to AccountCreation with required data
-    const goToAccountCreation = (e) => {
-        e.preventDefault();
+  // Navigate to AccountCreation with required data
+  const goToAccountCreation = (e) => {
+    e.preventDefault();
 
-        if (password !== confirmPassword) {
-            setError("Passwords do not match!");
-            return;
-        }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    console.log("Navigating with state:", { email, password, confirmPassword });
+
+    navigate("/account", { state: { email, password, confirmPassword } });
+  };
 
         console.log("Navigating with state:", { email, password, confirmPassword });
 
@@ -183,9 +189,13 @@ const LoginSignin = () => {
                         </div>
                     </form>
                 </div>
+
             </div>
-        </Layout>
-    );
+          </form>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default LoginSignin;
