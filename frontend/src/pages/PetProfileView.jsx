@@ -14,7 +14,9 @@ const PetProfileView = () => {
   useEffect(() => {
     const fetchPetData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/pets/${_id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pets/${_id}`
+        );
         setPetData(response.data); // Store pet data in state
       } catch (error) {
         setError("Failed to fetch pet data");
@@ -36,50 +38,75 @@ const PetProfileView = () => {
   if (error) return <p>{error}</p>;
 
   return (
-      <Layout footerType="default">
-        <div style={styles.profileContainer}>
-          <h1 style={styles.name}>{petData.name}</h1>
+    <Layout footerType="default">
+      <div style={styles.profileContainer}>
+        <h1 style={styles.name}>{petData.name}</h1>
 
-          {/* Pet Image */}
-          {petData.profileImage && (
-              <div style={styles.imageWrapper}>
-                <img
-                    src={petData.profileImage}
-                    alt={`${petData.name}'s profile`}
-                    style={styles.image}
-                />
-              </div>
-          )}
+        {/* Pet Image */}
+        {petData.profileImage && (
+          <div style={styles.imageWrapper}>
+            <img
+              src={petData.profileImage}
+              alt={`${petData.name}'s profile`}
+              style={styles.image}
+            />
+          </div>
+        )}
 
-          {/* Pet Details */}
-          <div style={styles.infoBox}>
-            <div style={styles.detailsContainer}>
-              <div style={{ ...styles.column, ...styles.firstColumn }}>
-                <p style={styles.detail}><strong>Type:</strong> {petData.type}</p>
-                <p style={styles.detail}><strong>Breed:</strong> {petData.breed}</p>
-                <p style={styles.detail}><strong>Age:</strong> {petData.age} years</p>
-                <p style={styles.detail}><strong>Gender:</strong> {petData.gender}</p>
-                <p style={styles.detail}><strong>Color:</strong> {petData.color}</p>
-                <p style={styles.detail}><strong>Weight:</strong> {petData.weight} kg</p>
-                <p style={styles.detail}><strong>Good With Kids:</strong> {petData.kids}</p>
-              </div>
-              <div style={styles.column}>
-                <p style={styles.detail}><strong>Description:</strong> {petData.description}</p>
-                <p style={styles.detail}><strong>Medical History:</strong> {petData.medicalHistory}</p>
-                <p style={styles.detail}><strong>Location:</strong> {petData.location}</p>
-                <p style={styles.detail}><strong>Availability:</strong> {petData.availability}</p>
-                <p style={styles.detail}><strong>Vaccination:</strong> {petData.vaccination}</p>
-                <p style={styles.detail}><strong>Spayed/Neutered:</strong> {petData.spayedNeutered}</p>
-              </div>
+        {/* Pet Details */}
+        <div style={styles.infoBox}>
+          <div style={styles.detailsContainer}>
+            <div style={{ ...styles.column, ...styles.firstColumn }}>
+              <p style={styles.detail}>
+                <strong>Type:</strong> {petData.type}
+              </p>
+              <p style={styles.detail}>
+                <strong>Breed:</strong> {petData.breed}
+              </p>
+              <p style={styles.detail}>
+                <strong>Age:</strong> {petData.age} years
+              </p>
+              <p style={styles.detail}>
+                <strong>Gender:</strong> {petData.gender}
+              </p>
+              <p style={styles.detail}>
+                <strong>Color:</strong> {petData.color}
+              </p>
+              <p style={styles.detail}>
+                <strong>Weight:</strong> {petData.weight} kg
+              </p>
+              <p style={styles.detail}>
+                <strong>Good With Kids:</strong> {petData.kids}
+              </p>
+            </div>
+            <div style={styles.column}>
+              <p style={styles.detail}>
+                <strong>Description:</strong> {petData.description}
+              </p>
+              <p style={styles.detail}>
+                <strong>Medical History:</strong> {petData.medicalHistory}
+              </p>
+              <p style={styles.detail}>
+                <strong>Location:</strong> {petData.location}
+              </p>
+              <p style={styles.detail}>
+                <strong>Availability:</strong> {petData.availability}
+              </p>
+              <p style={styles.detail}>
+                <strong>Vaccination:</strong> {petData.vaccination}
+              </p>
+              <p style={styles.detail}>
+                <strong>Spayed/Neutered:</strong> {petData.spayedNeutered}
+              </p>
             </div>
           </div>
-
-          <Button style={styles.button} onClick={handleEmailClick}>
-            Contact Us to Adopt
-          </Button>
         </div>
 
-      </Layout>
+        <Button style={styles.button} onClick={handleEmailClick}>
+          Contact Us to Adopt
+        </Button>
+      </div>
+    </Layout>
   );
 };
 
@@ -90,7 +117,7 @@ const styles = {
     padding: "10px",
     marginTop: "220px",
     backgroundColor: "#E0E9EB",
-    marginBottom: '100px',
+    marginBottom: "100px",
     border: "4px solid #000000",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     fontFamily: "'Hammersmith One', sans-serif",
@@ -159,6 +186,5 @@ const styles = {
     textAlign: "center",
   },
 };
-
 
 export default PetProfileView;

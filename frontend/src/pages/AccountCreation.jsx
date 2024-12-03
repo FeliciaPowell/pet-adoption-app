@@ -5,60 +5,70 @@ import "../style.css";
 import Layout from "../components/Layout.jsx";
 import Button from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock, faUser, faAddressBook, faCakeCandles, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faLock,
+  faUser,
+  faAddressBook,
+  faCakeCandles,
+  faCheckCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 const AccountCreation = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    const [currentStep, setCurrentStep] = useState(1);
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [modalActive, setModalActive] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [modalActive, setModalActive] = useState(false);
 
-    const [userDetails, setUserDetails] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        address: "",
-        birthday: "",
-        kids: false,
-        cats: false,
-        dogs: false,
-        otherPets: false,
-    });
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    birthday: "",
+    kids: false,
+    cats: false,
+    dogs: false,
+    otherPets: false,
+  });
 
-    // Initialize email, password from location or localStorage
-    useEffect(() => {
-        const email = location.state?.email || localStorage.getItem("email");
-        const password = location.state?.password || localStorage.getItem("password");
-        const confirmPassword = location.state?.confirmPassword || localStorage.getItem("confirmPassword");
+  // Initialize email, password from location or localStorage
+  useEffect(() => {
+    const email = location.state?.email || localStorage.getItem("email");
+    const password =
+      location.state?.password || localStorage.getItem("password");
+    const confirmPassword =
+      location.state?.confirmPassword ||
+      localStorage.getItem("confirmPassword");
 
-        if (!email || !password || !confirmPassword) {
-            setError("Required information missing. Redirecting...");
-            setTimeout(() => navigate("/login"), 3000);
-        } else {
-            setUserDetails((prev) => ({
-                ...prev,
-                email,
-                password,
-                confirmPassword,
-            }));
-            localStorage.setItem("email", email);
-            localStorage.setItem("password", password);
-            localStorage.setItem("confirmPassword", confirmPassword);
-        }
-    }, [location.state, navigate]);
+    if (!email || !password || !confirmPassword) {
+      setError("Required information missing. Redirecting...");
+      setTimeout(() => navigate("/login"), 3000);
+    } else {
+      setUserDetails((prev) => ({
+        ...prev,
+        email,
+        password,
+        confirmPassword,
+      }));
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      localStorage.setItem("confirmPassword", confirmPassword);
+    }
+  }, [location.state, navigate]);
 
-    // Handle field updates
-    const handleInputChange = (field, value) => {
-        setUserDetails((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
+  // Handle field updates
+  const handleInputChange = (field, value) => {
+    setUserDetails((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
     // Next button handler
     const handleNext = () => {
@@ -70,19 +80,22 @@ const AccountCreation = () => {
         setCurrentStep((prev) => prev + 1);
     };
 
-    // Back button handler
-    const handleBack = () => {
-        setError("");
-        setCurrentStep((prev) => Math.max(1, prev - 1));
-    };
+  // Back button handler
+  const handleBack = () => {
+    setError("");
+    setCurrentStep((prev) => Math.max(1, prev - 1));
+  };
 
-    // Submit account creation
-    const handleSubmit = async () => {
-        setLoading(true);
-        setError("");
-        try {
-            const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
-            const response = await axios.post("http://localhost:3000/user/", payload);
+  // Submit account creation
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const { confirmPassword, ...payload } = userDetails; // Exclude confirmPassword
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/`,
+        payload
+      );
 
             if (response.status === 201) {
                 setModalActive(true);
@@ -113,58 +126,67 @@ const AccountCreation = () => {
                         <li className={`form-3-progressbar ${currentStep === 3 ? "active" : ""}`}><div>3</div></li>
                     </ul>
                 </div>
-
-                {/* Success Modal */}
-                {modalActive && (
-                    <div className="modal-wrapper active">
-                        <div className="modal-content">
-                            <FontAwesomeIcon icon={faCheckCircle} size="3x" color="green" />
-                            <p>Account setup complete! Redirecting to login...</p>
-                        </div>
-                    </div>
-                )}
+        {/* Success Modal */}
+        {modalActive && (
+          <div className="modal-wrapper active">
+            <div className="modal-content">
+              <FontAwesomeIcon icon={faCheckCircle} size="3x" color="green" />
+              <p>Account setup complete! Redirecting to login...</p>
+            </div>
+          </div>
+        )}
 
                 {/* Error Message */}
                 {error && <p className="error-message">{error}</p>}
 
-                {/* Step 1: Account Details */}
-                {currentStep === 1 && (
-                    <div className="form-box">
-                        <h2>Account Details</h2>
-                        <form>
-                            <div className="input-box">
-                                <input
-                                    type="email"
-                                    value={userDetails.email}
-                                    onChange={(e) => handleInputChange("email", e.target.value)}
-                                    required
-                                />
-                                <label>Email</label>
-                                <i><FontAwesomeIcon icon={faEnvelope} /></i>
-                            </div>
-                            <div className="input-box">
-                                <input
-                                    type="password"
-                                    value={userDetails.password}
-                                    onChange={(e) => handleInputChange("password", e.target.value)}
-                                    required
-                                />
-                                <label>Password</label>
-                                <i><FontAwesomeIcon icon={faLock} /></i>
-                            </div>
-                            <div className="input-box">
-                                <input
-                                    type="password"
-                                    value={userDetails.confirmPassword}
-                                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                                    required
-                                />
-                                <label>Confirm Password</label>
-                                <i><FontAwesomeIcon icon={faLock} /></i>
-                            </div>
-                        </form>
-                    </div>
-                )}
+        {/* Step 1: Account Details */}
+        {currentStep === 1 && (
+          <div className="form-box">
+            <h2>Account Details</h2>
+            <form>
+              <div className="input-box">
+                <input
+                  type="email"
+                  value={userDetails.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  required
+                />
+                <label>Email</label>
+                <i>
+                  <FontAwesomeIcon icon={faEnvelope} />
+                </i>
+              </div>
+              <div className="input-box">
+                <input
+                  type="password"
+                  value={userDetails.password}
+                  onChange={(e) =>
+                    handleInputChange("password", e.target.value)
+                  }
+                  required
+                />
+                <label>Password</label>
+                <i>
+                  <FontAwesomeIcon icon={faLock} />
+                </i>
+              </div>
+              <div className="input-box">
+                <input
+                  type="password"
+                  value={userDetails.confirmPassword}
+                  onChange={(e) =>
+                    handleInputChange("confirmPassword", e.target.value)
+                  }
+                  required
+                />
+                <label>Confirm Password</label>
+                <i>
+                  <FontAwesomeIcon icon={faLock} />
+                </i>
+              </div>
+            </form>
+          </div>
+        )}
 
                 {/* Step 2: Personal Info */}
                 {currentStep === 2 && (
@@ -256,6 +278,7 @@ const AccountCreation = () => {
             </div>
         </Layout>
     );
+
 };
 
 export default AccountCreation;

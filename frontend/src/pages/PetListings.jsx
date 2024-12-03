@@ -21,7 +21,9 @@ const PetListings = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/pets");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pets`
+        );
         setAllPets(response.data); // Store unfiltered data
         setPets(response.data); // Initialize displayed pets
       } catch (error) {
@@ -39,9 +41,9 @@ const PetListings = () => {
 
     if (cats || dogs) {
       filteredPets = filteredPets.filter(
-          (pet) =>
-              (cats && pet.type.toLowerCase() === "cat") ||
-              (dogs && pet.type.toLowerCase() === "dog")
+        (pet) =>
+          (cats && pet.type.toLowerCase() === "cat") ||
+          (dogs && pet.type.toLowerCase() === "dog")
       );
     }
     if (kids) {
@@ -77,96 +79,98 @@ const PetListings = () => {
   if (error) return <p>{error}</p>;
 
   return (
-      <Layout footerType="default">
-        <h1 style={styles.heading}>Adoption Listings</h1>
-        <div style={styles.buttonContainer}>
-          {/* Sort Dropdown */}
-          <div style={styles.dropdown}>
-            <button
-                style={styles.button}
-                onClick={() => setIsSortOpen((prev) => !prev)}
-            >
-              SORT <span style={styles.icon}>☰</span>
-            </button>
-            {isSortOpen && (
-                <div style={styles.dropdownMenu}>
-                  <button
-                      style={{
-                        ...styles.dropdownItem,
-                        ...(hoveredItem === "name" ? styles.dropdownItemHover : {}),
-                      }}
-                      onMouseEnter={() => setHoveredItem("name")}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={handleSortByName}
-                  >
-                    SORT BY NAME
-                  </button>
-                  <button
-                      style={{
-                        ...styles.dropdownItem,
-                        ...(hoveredItem === "age" ? styles.dropdownItemHover : {}),
-                      }}
-                      onMouseEnter={() => setHoveredItem("age")}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={handleSortByAge}
-                  >
-                    SORT BY AGE
-                  </button>
-                </div>
-            )}
-          </div>
-          {/* Filter Dropdown */}
-          <div style={styles.dropdown}>
-            <button
-                style={styles.button}
-                onClick={() => setIsFilterOpen((prev) => !prev)}
-            >
-              FILTER <FontAwesomeIcon icon={faFilter} style={styles.filterIcon} />
-            </button>
-            {isFilterOpen && (
-                <div style={styles.dropdownMenu}>
-                  <label style={styles.dropdownItem}>
-                    <input
-                        type="checkbox"
-                        checked={cats}
-                        onChange={() => handleCheckboxChange(setCats, cats)}
-                    />
-                    Cats
-                  </label>
-                  <label style={styles.dropdownItem}>
-                    <input
-                        type="checkbox"
-                        checked={dogs}
-                        onChange={() => handleCheckboxChange(setDogs, dogs)}
-                    />
-                    Dogs
-                  </label>
-                  <label style={styles.dropdownItem}>
-                    <input
-                        type="checkbox"
-                        checked={kids}
-                        onChange={() => handleCheckboxChange(setKids, kids)}
-                    />
-                    Good with Kids
-                  </label>
-                  <label style={styles.dropdownItem}>
-                    <input
-                        type="checkbox"
-                        checked={spayNeuter}
-                        onChange={() => handleCheckboxChange(setSpayNeuter, spayNeuter)}
-                    />
-                    Spayed/Neutered
-                  </label>
-                </div>
-            )}
-          </div>
+    <Layout footerType="default">
+      <h1 style={styles.heading}>Adoption Listings</h1>
+      <div style={styles.buttonContainer}>
+        {/* Sort Dropdown */}
+        <div style={styles.dropdown}>
+          <button
+            style={styles.button}
+            onClick={() => setIsSortOpen((prev) => !prev)}
+          >
+            SORT <span style={styles.icon}>☰</span>
+          </button>
+          {isSortOpen && (
+            <div style={styles.dropdownMenu}>
+              <button
+                style={{
+                  ...styles.dropdownItem,
+                  ...(hoveredItem === "name" ? styles.dropdownItemHover : {}),
+                }}
+                onMouseEnter={() => setHoveredItem("name")}
+                onMouseLeave={() => setHoveredItem(null)}
+                onClick={handleSortByName}
+              >
+                SORT BY NAME
+              </button>
+              <button
+                style={{
+                  ...styles.dropdownItem,
+                  ...(hoveredItem === "age" ? styles.dropdownItemHover : {}),
+                }}
+                onMouseEnter={() => setHoveredItem("age")}
+                onMouseLeave={() => setHoveredItem(null)}
+                onClick={handleSortByAge}
+              >
+                SORT BY AGE
+              </button>
+            </div>
+          )}
         </div>
-        <div style={styles.petListings}>
-          {pets.map((pet) => (
-              <PetCard key={pet._id} pet={pet} />
-          ))}
+        {/* Filter Dropdown */}
+        <div style={styles.dropdown}>
+          <button
+            style={styles.button}
+            onClick={() => setIsFilterOpen((prev) => !prev)}
+          >
+            FILTER <FontAwesomeIcon icon={faFilter} style={styles.filterIcon} />
+          </button>
+          {isFilterOpen && (
+            <div style={styles.dropdownMenu}>
+              <label style={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={cats}
+                  onChange={() => handleCheckboxChange(setCats, cats)}
+                />
+                Cats
+              </label>
+              <label style={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={dogs}
+                  onChange={() => handleCheckboxChange(setDogs, dogs)}
+                />
+                Dogs
+              </label>
+              <label style={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={kids}
+                  onChange={() => handleCheckboxChange(setKids, kids)}
+                />
+                Good with Kids
+              </label>
+              <label style={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={spayNeuter}
+                  onChange={() =>
+                    handleCheckboxChange(setSpayNeuter, spayNeuter)
+                  }
+                />
+                Spayed/Neutered
+              </label>
+            </div>
+          )}
         </div>
-      </Layout>
+      </div>
+      <div style={styles.petListings}>
+        {pets.map((pet) => (
+          <PetCard key={pet._id} pet={pet} />
+        ))}
+      </div>
+    </Layout>
   );
 };
 
