@@ -43,7 +43,7 @@ const LoginSignin = () => {
         try {
             console.log("Logging in with:", { email, password });
 
-            const response = await axios.post("http://localhost:3000/login", {
+            const response = await axios.post("https://lumpy-brass-lemongrass.glitch.me/login", {
                 email,
                 password,
             });
@@ -59,6 +59,7 @@ const LoginSignin = () => {
             console.error("Login error:", err.response?.data || err.message);
             setError("Login failed. Please try again.");
         }
+ 
     };
 
     useEffect(() => {
