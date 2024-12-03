@@ -15,7 +15,7 @@ const PetProfileView = () => {
     const fetchPetData = async () => {
       try {
         const response = await axios.get(
-          `https://lumpy-brass-lemongrass.glitch.me/pets/${_id}`
+          `http://localhost:3000/pets/${_id}`
         );
         setPetData(response.data); // Store pet data in state
       } catch (error) {
@@ -115,9 +115,9 @@ const styles = {
     maxWidth: "800px",
     margin: "20px auto",
     padding: "10px",
-    marginTop: "220px",
+    marginTop: "250px",
     backgroundColor: "#E0E9EB",
-    marginBottom: "100px",
+    marginBottom: "150px",
     border: "4px solid #000000",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     fontFamily: "'Hammersmith One', sans-serif",
