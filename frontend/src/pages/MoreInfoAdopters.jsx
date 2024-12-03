@@ -102,8 +102,9 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh', // Full viewport height
-        overflow: 'hidden', // Prevent page overflow
+        height: 'calc(100vh - 120px)', // Subtract footer height from viewport height
+        overflowY: 'auto', // Enable scrolling for overflow
+        marginTop: '50px',
     },
     headingContainer: {
         marginTop: '-100px', // Adjust positioning of the heading

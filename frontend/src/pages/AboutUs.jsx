@@ -44,13 +44,12 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        overflow: 'hidden',
+        height: 'calc(100vh - 120px)', // Subtract footer height from viewport height
+        overflowY: 'auto', // Enable scrolling for overflow
+        marginTop: '50px',
     },
     headingContainer: {
-        textAlign: 'center',
-        marginBottom: '20px',
-        marginTop: '-100px'
+        marginTop: '-100px', // Adjust positioning of the heading
     },
     paragraph: {
         fontSize: '16px',
