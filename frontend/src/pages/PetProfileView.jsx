@@ -15,7 +15,7 @@ const PetProfileView = () => {
     const fetchPetData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/pets/${_id}`
+          `https://lumpy-brass-lemongrass.glitch.me/pets/${_id}`
         );
         setPetData(response.data); // Store pet data in state
       } catch (error) {
