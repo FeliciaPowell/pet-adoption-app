@@ -8,26 +8,32 @@ import Layout from "../components/Layout.jsx";
 import Button from "../components/Button";
 
 const LoginSignin = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [isRegister, setIsRegister] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
-    const [error, setError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Used for register mode
+  const [error, setError] = useState("");
 
-    const handleEmailChange = (event) => setEmail(event.target.value);
-    const handlePasswordChange = (event) => setPassword(event.target.value);
-    const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
+  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleConfirmPasswordChange = (event) =>
+    setConfirmPassword(event.target.value);
 
-    // Navigate to AccountCreation with required data
-    const goToAccountCreation = (e) => {
-        e.preventDefault();
+  // Navigate to AccountCreation with required data
+  const goToAccountCreation = (e) => {
+    e.preventDefault();
 
-        if (password !== confirmPassword) {
-            setError("Passwords do not match!");
-            return;
-        }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    console.log("Navigating with state:", { email, password, confirmPassword });
+
+    navigate("/account", { state: { email, password, confirmPassword } });
+  };
 
         console.log("Navigating with state:", { email, password, confirmPassword });
 
@@ -35,25 +41,19 @@ const LoginSignin = () => {
     };
 
     const handleLoginSubmit = async (e) => {
-        e.preventDefault(); // Prevent form's default submission behavior
+        e.preventDefault();
         setError(""); // Reset error message
-    
-        console.log("Login button clicked"); // Debugging log
-        console.log("Current email and password:", { email, password });
-    
+
         try {
+            console.log("Logging in with:", { email, password });
+
             const response = await axios.post("http://localhost:3000/login", {
                 email,
                 password,
             });
-    
-            console.log("Server response:", response); // Log server response for debugging
-    
+
             if (response.status === 200) {
                 console.log("Login successful:", response.data.user);
-                const token = response.data.token;
-                console.log("Received token:", token); // Log the token
-                localStorage.setItem("token", token); // Save token
                 localStorage.setItem("user", JSON.stringify(response.data.user)); // Save token for authentication
                 navigate("/pets"); // Redirect to /pets upon successful login
             } else {
@@ -64,7 +64,7 @@ const LoginSignin = () => {
             setError("Login failed. Please try again.");
         }
     };
-    
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const mode = params.get("mode");
@@ -188,9 +188,13 @@ const LoginSignin = () => {
                         </div>
                     </form>
                 </div>
+
             </div>
-        </Layout>
-    );
+          </form>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default LoginSignin;
